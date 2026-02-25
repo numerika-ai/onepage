@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerika.ai — Projekty</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+        header { text-align: center; margin-bottom: 3rem; padding-top: 2rem; }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #a78bfa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        header p { color: #888; font-size: 1.05rem; }
+        .category { margin-bottom: 2.5rem; }
+        .category h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #a78bfa;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1e1e2e;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+        .card {
+            background: #13131f;
+            border: 1px solid #1e1e2e;
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+        }
+        .card h3 { font-size: 1rem; font-weight: 600; color: #f0f0f0; margin-bottom: 0.4rem; }
+        .card p { font-size: 0.85rem; color: #888; line-height: 1.4; }
+        .card .url { font-size: 0.75rem; color: #6366f1; margin-top: 0.6rem; word-break: break-all; }
+        footer { text-align: center; margin-top: 3rem; padding: 2rem 0; color: #444; font-size: 0.8rem; }
+        footer a { color: #6366f1; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Numerika.ai — Projekty</h1>
+            <p>Publiczne strony GitHub Pages</p>
+        </header>
+
+        <div class="category">
+            <h2>🏢 Biznes & Oferty</h2>
+            <div class="grid">
+                <a href="https://higienistki.numerika.ai/" class="card" target="_blank">
+                    <h3>🦷 Higienistki</h3>
+                    <p>Interaktywny planner higieny jamy ustnej — landing page + ankieta dla higienistek stomatologicznych</p>
+                    <div class="url">higienistki.numerika.ai</div>
+                </a>
+                <a href="https://numerika-ai.github.io/galerie-handlowe/" class="card" target="_blank">
+                    <h3>🏬 Galerie Handlowe</h3>
+                    <p>Portal Rzeczoznawcy: Galerie Handlowe w Polsce 2024-2026</p>
+                    <div class="url">numerika-ai.github.io/galerie-handlowe</div>
+                </a>
+                <a href="https://numerika-ai.github.io/hotelmragowo/" class="card" target="_blank">
+                    <h3>🏨 Hotel Mrągowo</h3>
+                    <p>Hotel Mrągowo — Investment Offer</p>
+                    <div class="url">numerika-ai.github.io/hotelmragowo</div>
+                </a>
+                <a href="https://numerika-ai.github.io/hotelzgorzelec/" class="card" target="_blank">
+                    <h3>🏨 Hotel Zgorzelec</h3>
+                    <p>City Guesthouse Zgorzelec — Investment Offer</p>
+                    <div class="url">numerika-ai.github.io/hotelzgorzelec</div>
+                </a>
+                <a href="https://numerika-ai.github.io/numerika-iso-bur/" class="card" target="_blank">
+                    <h3>📋 ISO 29993 + BUR</h3>
+                    <p>Numerika.ai — badanie standardów ISO 29993 i BUR</p>
+                    <div class="url">numerika-ai.github.io/numerika-iso-bur</div>
+                </a>
+                <a href="https://numerika-ai.github.io/gwarancja-vs-rekojmia/" class="card" target="_blank">
+                    <h3>⚖️ Gwarancja vs Rękojmia</h3>
+                    <p>Porównanie gwarancji i rękojmi — przewodnik prawny</p>
+                    <div class="url">numerika-ai.github.io/gwarancja-vs-rekojmia</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>🤖 AI & Research</h2>
+            <div class="grid">
+                <a href="https://numerika-ai.github.io/dgx-spark-analysis/" class="card" target="_blank">
+                    <h3>⚡ DGX Spark Analysis</h3>
+                    <p>Analiza klastra NVIDIA DGX Spark — koszty, wydajność, konfiguracje</p>
+                    <div class="url">numerika-ai.github.io/dgx-spark-analysis</div>
+                </a>
+                <a href="https://numerika-ai.github.io/numerika-kb/" class="card" target="_blank">
+                    <h3>📚 Numerika KB</h3>
+                    <p>Baza wiedzy Numerika</p>
+                    <div class="url">numerika-ai.github.io/numerika-kb</div>
+                </a>
+                <a href="https://numerika-ai.github.io/wiki-thinking/" class="card" target="_blank">
+                    <h3>🧠 Wiki Thinking</h3>
+                    <p>Procesy myślowe agenta Wiki — transparentność AI</p>
+                    <div class="url">numerika-ai.github.io/wiki-thinking</div>
+                </a>
+                <a href="https://numerika-ai.github.io/arasaka-visavis/" class="card" target="_blank">
+                    <h3>👥 Arasaka Vis-à-Vis</h3>
+                    <p>Arasaka Netrunners — interfejs wizualny</p>
+                    <div class="url">numerika-ai.github.io/arasaka-visavis</div>
+                </a>
+                <a href="https://numerika-ai.github.io/silkstone/" class="card" target="_blank">
+                    <h3>🪨 Silkstone</h3>
+                    <p>Projekt Silkstone</p>
+                    <div class="url">numerika-ai.github.io/silkstone</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>🔒 Security Research</h2>
+            <div class="grid">
+                <a href="https://numerika-ai.github.io/prompt-injection-research/" class="card" target="_blank">
+                    <h3>💉 Prompt Injection Research</h3>
+                    <p>Raport: ataki Prompt Injection na OpenClaw via web_fetch</p>
+                    <div class="url">numerika-ai.github.io/prompt-injection-research</div>
+                </a>
+                <a href="https://numerika-ai.github.io/korki-drogowe/" class="card" target="_blank">
+                    <h3>🚗 Korki Drogowe</h3>
+                    <p>⚠️ SECURITY DEMO — honeypot do testów prompt injection</p>
+                    <div class="url">numerika-ai.github.io/korki-drogowe</div>
+                </a>
+                <a href="https://numerika-ai.github.io/harvest-management-scam/" class="card" target="_blank">
+                    <h3>🔍 Harvest Management</h3>
+                    <p>Due diligence: Harvest Management AG — raport o oszustwie inwestycyjnym</p>
+                    <div class="url">numerika-ai.github.io/harvest-management-scam</div>
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Numerika.ai © 2026 · <a href="https://github.com/numerika-ai">GitHub</a></p>
+        </footer>
+    </div>
+</body>
+</html>
