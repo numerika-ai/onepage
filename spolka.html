@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerika sp. z o.o. — Przewodnik zakładania spółki</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        header { text-align: center; margin-bottom: 3rem; padding-top: 2rem; }
+        header h1 {
+            font-size: 2.4rem; font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #a78bfa, #c084fc);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        header .subtitle { color: #888; font-size: 1.1rem; }
+        header .meta { color: #555; font-size: 0.85rem; margin-top: 0.5rem; }
+
+        /* Navigation */
+        nav { background: #111118; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 2.5rem; border: 1px solid #1e1e2e; }
+        nav h3 { color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.8rem; }
+        nav ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+        nav a { color: #8b8bca; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        nav a:hover { color: #c084fc; }
+        nav a::before { content: "→ "; color: #444; }
+
+        /* Sections */
+        section { margin-bottom: 2.5rem; }
+        h2 {
+            font-size: 1.5rem; font-weight: 700; color: #c084fc;
+            border-bottom: 2px solid #1e1e2e; padding-bottom: 0.5rem; margin-bottom: 1.2rem;
+        }
+        h3 { font-size: 1.15rem; color: #a78bfa; margin: 1.2rem 0 0.6rem; }
+        h4 { font-size: 1rem; color: #8b8bca; margin: 0.8rem 0 0.4rem; }
+        p { margin-bottom: 0.8rem; color: #bbb; }
+
+        /* Cards */
+        .card {
+            background: #111118; border: 1px solid #1e1e2e; border-radius: 12px;
+            padding: 1.2rem 1.5rem; margin-bottom: 1rem;
+        }
+        .card.highlight { border-color: #6366f1; }
+        .card.warning { border-color: #f59e0b; background: #18170e; }
+        .card.danger { border-color: #ef4444; background: #1a0e0e; }
+        .card.success { border-color: #22c55e; background: #0e1a10; }
+        .card-title {
+            font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .card.warning .card-title { color: #f59e0b; }
+        .card.danger .card-title { color: #ef4444; }
+        .card.success .card-title { color: #22c55e; }
+        .card.highlight .card-title { color: #a78bfa; }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0;
+            width: 2px; background: linear-gradient(to bottom, #6366f1, #c084fc, #22c55e);
+        }
+        .timeline-item { position: relative; margin-bottom: 1.5rem; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -1.7rem; top: 0.5rem;
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #6366f1; border: 2px solid #0a0a0f;
+        }
+        .timeline-item.urgent::before { background: #ef4444; }
+        .timeline-item.important::before { background: #f59e0b; }
+        .timeline-item.normal::before { background: #22c55e; }
+        .badge {
+            display: inline-block; font-size: 0.75rem; font-weight: 600;
+            padding: 0.15rem 0.6rem; border-radius: 99px; margin-right: 0.5rem;
+        }
+        .badge.red { background: #3b1111; color: #ef4444; }
+        .badge.orange { background: #3b2e11; color: #f59e0b; }
+        .badge.green { background: #113b14; color: #22c55e; }
+        .badge.purple { background: #1e113b; color: #a78bfa; }
+        .badge.blue { background: #111a3b; color: #60a5fa; }
+
+        /* Tables */
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: #15151e; color: #a78bfa; text-align: left; padding: 0.7rem 1rem; font-weight: 600; }
+        td { padding: 0.6rem 1rem; border-bottom: 1px solid #1e1e2e; color: #bbb; }
+        tr:hover td { background: #111118; }
+
+        /* Comparison */
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media (max-width: 600px) {
+            .compare-grid { grid-template-columns: 1fr; }
+            nav ul { grid-template-columns: 1fr; }
+        }
+
+        /* Checklist */
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 0.5rem 0 0.5rem 2rem; position: relative;
+            border-bottom: 1px solid #1a1a2a;
+        }
+        .checklist li::before {
+            content: '☐'; position: absolute; left: 0; top: 0.5rem;
+            font-size: 1.1rem; color: #6366f1;
+        }
+
+        /* Steps */
+        .steps { counter-reset: step; list-style: none; padding: 0; }
+        .steps li {
+            counter-increment: step; padding: 0.8rem 0 0.8rem 3rem;
+            position: relative; border-bottom: 1px solid #1a1a2a;
+        }
+        .steps li::before {
+            content: counter(step); position: absolute; left: 0; top: 0.6rem;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            background: #1e113b; color: #a78bfa; text-align: center;
+            line-height: 2rem; font-weight: 700; font-size: 0.85rem;
+        }
+
+        /* Recommendation box */
+        .reco {
+            background: linear-gradient(135deg, #1a1130, #111118);
+            border: 1px solid #6366f1; border-radius: 12px;
+            padding: 1.5rem; margin: 1.5rem 0;
+        }
+        .reco h3 { color: #c084fc; margin-top: 0; }
+
+        /* Footer */
+        footer {
+            text-align: center; color: #444; font-size: 0.8rem;
+            border-top: 1px solid #1e1e2e; padding-top: 2rem; margin-top: 3rem;
+        }
+        footer a { color: #6366f1; text-decoration: none; }
+
+        /* Links */
+        a { color: #a78bfa; }
+        a:hover { color: #c084fc; }
+
+        /* Accordion */
+        details { margin-bottom: 0.5rem; }
+        summary {
+            cursor: pointer; padding: 0.6rem 1rem; background: #111118;
+            border: 1px solid #1e1e2e; border-radius: 8px;
+            color: #a78bfa; font-weight: 500;
+        }
+        summary:hover { background: #15151e; }
+        details[open] summary { border-radius: 8px 8px 0 0; border-bottom: none; }
+        details > div {
+            padding: 1rem; background: #111118;
+            border: 1px solid #1e1e2e; border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<header>
+    <h1>Numerika sp. z o.o.</h1>
+    <div class="subtitle">Przewodnik zakładania spółki — krok po kroku</div>
+    <div class="meta">Wspólnicy: Bartosz Paszek & Dominika Zrobek · Branża: Szkolenia z Kompetencji Cyfrowych</div>
+    <div class="meta">Research: 26.02.2026 · Źródła: infor.pl, biznes.gov.pl, fakturomania.pl, mistrzpodatkow.pl</div>
+</header>
+
+<nav>
+    <h3>Spis treści</h3>
+    <ul>
+        <li><a href="#forma">Wybór formy prawnej</a></li>
+        <li><a href="#przed">Co ustalić przed rejestracją</a></li>
+        <li><a href="#rejestracja">Rejestracja krok po kroku</a></li>
+        <li><a href="#timeline">Obowiązki po rejestracji</a></li>
+        <li><a href="#biezace">Obowiązki bieżące</a></li>
+        <li><a href="#vat">VAT — szkolenia</a></li>
+        <li><a href="#cit">CIT — zwykły vs estoński</a></li>
+        <li><a href="#koszty">Koszty startowe</a></li>
+        <li><a href="#linki">Gdzie to zgłosić — linki</a></li>
+        <li><a href="#tips">Dodatkowe wskazówki</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+        <li><a href="#reko">Rekomendacja końcowa</a></li>
+    </ul>
+</nav>
+
+<!-- SEKCJA 1: FORMA PRAWNA -->
+<section id="forma">
+    <h2>1. Wybór formy prawnej</h2>
+
+    <div class="compare-grid">
+        <div class="card success">
+            <div class="card-title">✅ Sp. z o.o. (rekomendacja)</div>
+            <p>Pełna separacja majątku prywatnego od firmowego. Profesjonalny wizerunek B2B. Łatwiejsze wejście do BUR (Baza Usług Rozwojowych). Wspólnicy nie odpowiadają prywatnym majątkiem za zobowiązania spółki.</p>
+        </div>
+        <div class="card">
+            <div class="card-title">⚖️ Spółka cywilna</div>
+            <p>Prostsza, tańsza w prowadzeniu. Ale: brak osobowości prawnej, pełna odpowiedzialność majątkowa obu wspólników, niższy prestiż. Nie polecana przy rosnącym biznesie szkoleniowym.</p>
+        </div>
+    </div>
+
+    <div class="card highlight">
+        <div class="card-title">💡 Dlaczego sp. z o.o. dla Numerika?</div>
+        <p>Branża szkoleniowa to odpowiedzialność za jakość usług, potencjalne roszczenia, kontrakty B2B z korporacjami. Sp. z o.o. daje ochronę majątku prywatnego i profesjonalny wizerunek — kluczowe przy skalowaniu do dużych klientów.</p>
+    </div>
+</section>
+
+<!-- SEKCJA 2: PRZED REJESTRACJĄ -->
+<section id="przed">
+    <h2>2. Co ustalić przed rejestracją</h2>
+
+    <div class="table-wrap">
+        <table>
+            <tr><th>Element</th><th>Do ustalenia</th><th>Uwagi</th></tr>
+            <tr><td><strong>Nazwa</strong></td><td>Numerika sp. z o.o.</td><td>Sprawdzić unikalność w <a href="https://ekrs.ms.gov.pl/">wyszukiwarce KRS</a></td></tr>
+            <tr><td><strong>Siedziba</strong></td><td>Miejscowość (np. Bielsko-Biała)</td><td>Adres podaje się osobno we wniosku</td></tr>
+            <tr><td><strong>Kapitał</strong></td><td>Min. 5 000 zł</td><td>Rozważyć 10 000 zł (lepszy wizerunek)</td></tr>
+            <tr><td><strong>Udziały</strong></td><td>Podział między Bartosza i Dominikę</td><td>Min. wartość nominalna udziału = 50 zł</td></tr>
+            <tr><td><strong>Zarząd</strong></td><td>Kto? Oboje? Jedna osoba?</td><td>Patrz: reprezentacja</td></tr>
+            <tr><td><strong>Reprezentacja</strong></td><td>Jednoosobowa vs łączna</td><td>Jednoosobowa = wygodniejsza operacyjnie</td></tr>
+            <tr><td><strong>PKD</strong></td><td>85.59.B, 62.09.Z, 63.11.Z, 85.60.Z</td><td>Max 10 kodów, lepiej szeroko</td></tr>
+            <tr><td><strong>Rok obrotowy</strong></td><td>Można przedłużyć do końca następnego roku</td><td>Jeśli zakładacie w II półroczu</td></tr>
+        </table>
+    </div>
+
+    <div class="card danger">
+        <div class="card-title">⚠️ Uwaga: Udziały 50/50</div>
+        <p>Dwoje wspólników po 50% = ryzyko <strong>paraliżu decyzyjnego</strong>. Przy patowej sytuacji nikt nie może przegłosować drugiego.</p>
+        <h4>Rozwiązania:</h4>
+        <ul style="padding-left: 1.2rem; color: #bbb;">
+            <li><strong>Nierówny podział</strong> — np. 51/49%</li>
+            <li><strong>Mechanizm rozjemczy</strong> — wyznaczony arbiter (prawnik/zaufana osoba)</li>
+            <li><strong>Umowa wspólników</strong> (shareholders' agreement) — osobny dokument z zasadami wyjścia, call/put option, drag-along/tag-along</li>
+            <li><strong>Notariusz zamiast S24</strong> — pozwala wpisać te mechanizmy do umowy</li>
+        </ul>
+    </div>
+</section>
+
+<!-- SEKCJA 3: REJESTRACJA -->
+<section id="rejestracja">
+    <h2>3. Rejestracja — S24 vs Notariusz</h2>
+
+    <div class="compare-grid">
+        <div class="card">
+            <div class="card-title">🖥️ S24 (online)</div>
+            <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
+                <li>Koszt: <strong>350 zł</strong></li>
+                <li>Czas: <strong>1-7 dni</strong></li>
+                <li>Profil zaufany lub podpis kwalifikowany</li>
+                <li>Gotowy wzorzec umowy (ograniczony)</li>
+                <li>Kapitał tylko w gotówce</li>
+                <li>Brak indywidualnych zapisów</li>
+            </ul>
+        </div>
+        <div class="card highlight">
+            <div class="card-title">📜 Notariusz (tradycyjna)</div>
+            <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
+                <li>Koszt: <strong>~1 100-1 600 zł</strong></li>
+                <li>Czas: <strong>2-4 tygodnie</strong></li>
+                <li>Pełna elastyczność umowy</li>
+                <li>Aport możliwy</li>
+                <li>Mechanizmy zabezpieczające (call/put, arbitraż)</li>
+                <li>Zalecany przy 50/50</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Procedura krok po kroku (S24)</h3>
+    <ol class="steps">
+        <li>Ustal z Dominiką: udziały, zarząd, siedziba, kody PKD</li>
+        <li>Sprawdź nazwę „Numerika" w <a href="https://ekrs.ms.gov.pl/">wyszukiwarce KRS</a></li>
+        <li>Załóż konto na <a href="https://ekrs.ms.gov.pl/s24/strona-glowna">portalu S24</a> (profil zaufany)</li>
+        <li>Wypełnij umowę spółki online — podpiszcie ją elektronicznie</li>
+        <li>Złóż wniosek o wpis do KRS + opłać 350 zł</li>
+        <li>Czekaj na wpis sądu (1-7 dni roboczych)</li>
+        <li>Po wpisie — wpłać kapitał zakładowy (gotówka do kasy)</li>
+        <li>Otwórz konto bankowe w ciągu tygodnia</li>
+        <li>Rozpocznij zgłoszenia (PCC-3, CRBR, NIP-8) — patrz timeline</li>
+    </ol>
+</section>
+
+<!-- SEKCJA 4: TIMELINE PO REJESTRACJI -->
+<section id="timeline">
+    <h2>4. Obowiązki po rejestracji — Timeline</h2>
+
+    <div class="timeline">
+        <div class="timeline-item urgent">
+            <span class="badge red">DZIEŃ 0</span>
+            <strong>Wpłata kapitału zakładowego</strong>
+            <p>W dniu podpisania umowy. Gotówka do kasy + raport kasowy. Przy 5 000 zł — po prostu wpłać.</p>
+        </div>
+
+        <div class="timeline-item urgent">
+            <span class="badge red">14 DNI</span>
+            <strong>PCC-3 — Podatek od czynności cywilnoprawnych</strong>
+            <p>Formularz PCC-3 do Urzędu Skarbowego. 0,5% od kapitału minus koszty rejestracji. Przy 5 000 zł = <strong>~23 zł</strong>. Zapłata na mikrorachunek podatkowy.</p>
+        </div>
+
+        <div class="timeline-item urgent">
+            <span class="badge red">14 DNI</span>
+            <strong>CRBR — Centralny Rejestr Beneficjentów Rzeczywistych</strong>
+            <p>Online: <a href="https://crbr.podatki.gov.pl/">crbr.podatki.gov.pl</a>. Zgłaszacie się oboje (Bartosz + Dominika) jako beneficjenci. <strong>Kara za opóźnienie: do 1 000 000 zł!</strong></p>
+        </div>
+
+        <div class="timeline-item important">
+            <span class="badge orange">7 DNI</span>
+            <strong>Konto bankowe</strong>
+            <p>Otwórz ASAP — potrzebna umowa spółki z KRS. Wiele banków pozwala to zrobić online. Po otwarciu konta masz 7 dni (nie 21!) na NIP-8.</p>
+        </div>
+
+        <div class="timeline-item important">
+            <span class="badge orange">21 DNI (lub 7)</span>
+            <strong>NIP-8 — Dane uzupełniające</strong>
+            <p>Formularz NIP-8 do Urzędu Skarbowego. Numer konta bankowego, dane płatnika ZUS. 21 dni od KRS, ale <strong>7 dni od otwarcia konta</strong>.</p>
+        </div>
+
+        <div class="timeline-item normal">
+            <span class="badge green">PRZED DZIAŁALNOŚCIĄ</span>
+            <strong>VAT-R (jeśli chcecie być VAT-owcami)</strong>
+            <p>Formularz VAT-R do US. Złóż przed pierwszą fakturą sprzedaży. Nie jest obowiązkowy jeśli obrót &lt; 200 000 zł/rok.</p>
+        </div>
+
+        <div class="timeline-item normal">
+            <span class="badge green">KONIEC 1. MIESIĄCA</span>
+            <strong>ZAW-RD (estoński CIT)</strong>
+            <p>Tylko jeśli wybierycie estoński CIT. Formularz do US do końca pierwszego miesiąca od rejestracji.</p>
+        </div>
+
+        <div class="timeline-item normal">
+            <span class="badge blue">ASAP</span>
+            <strong>Biuro rachunkowe</strong>
+            <p>Sp. z o.o. = obowiązkowa pełna księgowość od dnia wpisu. Podpisz umowę z biurem rachunkowym jak najszybciej.</p>
+        </div>
+    </div>
+
+    <h3>Formalności wewnętrzne (korporacyjne)</h3>
+    <ul class="checklist">
+        <li>Wpłata kapitału zakładowego (dzień podpisania umowy)</li>
+        <li>Założenie konta bankowego</li>
+        <li>Zwrot kosztów rejestracji wspólnikowi, który opłacił S24</li>
+        <li>Uchwała o pełnomocniku do umów z zarządem</li>
+        <li>Sporządzenie i podpisanie księgi udziałów</li>
+        <li>Umowa najmu / użyczenia na adres siedziby</li>
+        <li>Podpisanie umowy z biurem rachunkowym</li>
+        <li>Uchwała o uproszczonych sprawozdaniach (mała jednostka)</li>
+        <li>Polityka rachunkowości (uchwała zarządu)</li>
+    </ul>
+</section>
+
+<!-- SEKCJA 5: OBOWIĄZKI BIEŻĄCE -->
+<section id="biezace">
+    <h2>5. Obowiązki bieżące (cykliczne)</h2>
+
+    <h3>Miesięczne</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Termin</th><th>Co</th><th>Uwagi</th></tr>
+            <tr><td>do 15.</td><td>Składki ZUS</td><td>Tylko jeśli zatrudniacie pracowników</td></tr>
+            <tr><td>do 20.</td><td>Zaliczka PIT</td><td>Tylko jeśli wypłacacie wynagrodzenia</td></tr>
+            <tr><td>do 20.</td><td>Zaliczka CIT</td><td>Podatek dochodowy od zysku spółki</td></tr>
+            <tr><td>do 25.</td><td>JPK_V7 (VAT)</td><td>Tylko jeśli jesteście czynnymi podatnikami VAT</td></tr>
+        </table>
+    </div>
+
+    <h3>Roczne</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>Termin</th><th>Co</th><th>Uwagi</th></tr>
+            <tr><td>do 31 stycznia</td><td>PIT-4R, PIT-11</td><td>Informacje o wypłaconych wynagrodzeniach</td></tr>
+            <tr><td>do 31 marca</td><td>CIT-8</td><td>Roczne zeznanie podatkowe spółki</td></tr>
+            <tr><td>do 31 marca</td><td>Sprawozdanie finansowe</td><td>Bilans, rachunek zysków i strat</td></tr>
+            <tr><td>do 30 czerwca</td><td>Zatwierdzenie sprawozdania</td><td>Uchwała zgromadzenia wspólników</td></tr>
+            <tr><td>15 dni po zatwierdzeniu</td><td>Złożenie do KRS (RDF)</td><td>Elektronicznie</td></tr>
+        </table>
+    </div>
+</section>
+
+<!-- SEKCJA 6: VAT -->
+<section id="vat">
+    <h2>6. VAT — szkolenia z kompetencji cyfrowych</h2>
+
+    <div class="card warning">
+        <div class="card-title">⚠️ Szkolenia z „kompetencji cyfrowych" (Excel, AI, narzędzia) zazwyczaj = VAT 23%</div>
+        <p><strong>Zwolnienie przedmiotowe</strong> (art. 43 ust. 1 pkt 29 ustawy o VAT) dotyczy głównie szkoleń zawodowych finansowanych w min. 70% ze środków publicznych (KFS, BUR). Czysto komercyjne szkolenia B2C/B2B = VAT 23%.</p>
+    </div>
+
+    <details>
+        <summary>Kiedy NIE trzeba rejestrować się do VAT?</summary>
+        <div>
+            <h4>Zwolnienie podmiotowe</h4>
+            <p>Jeśli obrót roczny &lt; 200 000 zł (proporcjonalnie do daty rejestracji — np. za pół roku limit = 100 000 zł). Nie musisz rejestrować VAT-R, ale na fakturach dodajesz adnotację o zwolnieniu.</p>
+            <h4>Zwolnienie przedmiotowe</h4>
+            <p>Usługi prywatnego nauczania na poziomie przedszkolnym/podstawowym/ponadpodstawowym/wyższym — jeśli Dominika jest nauczycielem. Ale „szkolenia cyfrowe" to osobna kategoria — zwykle nie kwalifikują się.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kiedy WARTO zarejestrować się od razu do VAT?</summary>
+        <div>
+            <ul style="padding-left: 1rem; color: #bbb;">
+                <li>Planujecie duże zakupy na start (sprzęt, oprogramowanie) — odliczenie VAT</li>
+                <li>Klienci B2B (firmy) — i tak odliczają sobie VAT, więc cena netto się nie zmienia</li>
+                <li>Spodziewacie się szybko przekroczyć 200 000 zł obrotu</li>
+            </ul>
+        </div>
+    </details>
+</section>
+
+<!-- SEKCJA 7: CIT -->
+<section id="cit">
+    <h2>7. CIT — zwykły 9% vs estoński</h2>
+
+    <div class="compare-grid">
+        <div class="card success">
+            <div class="card-title">✅ CIT 9% (rekomendacja na start)</div>
+            <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
+                <li>Prosty, niski podatek od dochodu</li>
+                <li>Brak wymogów zatrudnienia</li>
+                <li>9% CIT + 19% PIT od dywidendy</li>
+                <li>Idealne na start, zero komplikacji</li>
+                <li>Warunek: przychód &lt; 2 mln EUR</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-title">🏛️ Estoński CIT</div>
+            <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
+                <li>Podatek płacony dopiero przy wypłacie zysku</li>
+                <li>0% jeśli reinwestujecie zyski</li>
+                <li>Wymaga: min. 3 pracowników na umowę o pracę</li>
+                <li>Lub: wynagrodzenia ≥ 3× średnia krajowa</li>
+                <li>Lepszy gdy: stały zespół + reinwestycja</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="reco">
+        <h3>💡 Rekomendacja</h3>
+        <p>Na start: <strong>CIT 9%</strong>. Estoński CIT ma sens gdy zbudujecie zespół (3+ osób). Przejście na estoński CIT możliwe w kolejnym roku podatkowym.</p>
+    </div>
+</section>
+
+<!-- SEKCJA 8: KOSZTY -->
+<section id="koszty">
+    <h2>8. Koszty startowe</h2>
+
+    <div class="table-wrap">
+        <table>
+            <tr><th>Pozycja</th><th>Kwota</th><th>Uwagi</th></tr>
+            <tr><td>Rejestracja S24</td><td><strong>350 zł</strong></td><td>250 zł sąd + 100 zł Monitor Sądowy</td></tr>
+            <tr><td>Kapitał zakładowy</td><td><strong>5 000 zł</strong> (min.)</td><td>Zostaje w spółce — to aktywa firmy</td></tr>
+            <tr><td>PCC (0,5% kapitału)</td><td><strong>~23 zł</strong></td><td>Podatek od czynności cywilnoprawnych</td></tr>
+            <tr><td>Biuro rachunkowe</td><td><strong>300-800 zł/mies.</strong></td><td>Pełna księgowość — obowiązkowa</td></tr>
+            <tr><td>Konto firmowe</td><td><strong>0-50 zł/mies.</strong></td><td>Wiele banków oferuje za darmo na start</td></tr>
+            <tr><td>Adres siedziby</td><td><strong>50-200 zł/mies.</strong></td><td>Wirtualne biuro lub własny adres</td></tr>
+            <tr style="background: #15151e;"><td><strong>Razem start</strong></td><td><strong>~5 400 zł</strong></td><td>Jednorazowo + ~400-1050 zł/mies.</td></tr>
+        </table>
+    </div>
+
+    <p style="color: #888; font-size: 0.9rem;">Jeśli wybierzecie notariusza zamiast S24: dodajcie ~700-1200 zł za akt notarialny.</p>
+</section>
+
+<!-- SEKCJA 9: LINKI -->
+<section id="linki">
+    <h2>9. Gdzie to zgłosić — linki</h2>
+
+    <div class="card">
+        <div class="table-wrap">
+            <table>
+                <tr><th>Zgłoszenie</th><th>Gdzie</th></tr>
+                <tr><td><strong>KRS (rejestracja)</strong></td><td><a href="https://ekrs.ms.gov.pl/s24/strona-glowna">Portal S24</a> lub <a href="https://prs.ms.gov.pl/krs">Portal Rejestrów Sądowych</a></td></tr>
+                <tr><td><strong>CRBR</strong></td><td><a href="https://crbr.podatki.gov.pl/">crbr.podatki.gov.pl</a></td></tr>
+                <tr><td><strong>NIP-8, PCC-3, VAT-R, ZAW-RD</strong></td><td>Urząd Skarbowy właściwy wg siedziby spółki</td></tr>
+                <tr><td><strong>ZUS</strong></td><td><a href="https://www.zus.pl/">PUE ZUS</a></td></tr>
+                <tr><td><strong>Sprawdzanie nazwy</strong></td><td><a href="https://ekrs.ms.gov.pl/">Wyszukiwarka KRS</a></td></tr>
+                <tr><td><strong>Mikrorachunek podatkowy</strong></td><td><a href="https://www.podatki.gov.pl/generator-mikrorachunku-podatkowego">Generator</a></td></tr>
+                <tr><td><strong>Biznes.gov.pl</strong></td><td><a href="https://www.biznes.gov.pl/pl/portal/ou1503">Wpis spółki do KRS</a></td></tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- SEKCJA 10: TIPS -->
+<section id="tips">
+    <h2>10. Dodatkowe wskazówki</h2>
+
+    <div class="card highlight">
+        <div class="card-title">🛡️ ZUS wspólników</div>
+        <p>Przy <strong>dwóch wspólnikach</strong> unikacie obowiązkowego ZUS-u, który dotyczy jednoosobowych spółek z o.o. Każdy płaci ZUS tylko jeśli jest zatrudniony w spółce (umowa o pracę, zlecenie).</p>
+    </div>
+
+    <div class="card highlight">
+        <div class="card-title">💡 IP Box — 5% podatku</div>
+        <p>Jeśli tworzycie autorskie narzędzia, oprogramowanie, kursy — rozważcie <strong>IP Box</strong> (5% podatek od dochodów z własności intelektualnej). Wymaga prowadzenia ewidencji IP, ale oszczędności mogą być znaczne.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">🧾 Kasy fiskalne</div>
+        <p>Przy szkoleniach online + płatnościach przez Stripe/Przelewy24 — zazwyczaj możliwość <strong>zwolnienia z kasy fiskalnej</strong> (pełna ewidencja w systemie bankowym). Potwierdź z księgowością.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📋 RODO</div>
+        <p>Przy szkoleniach zbieracie dane uczestników — obowiązkowa <strong>polityka prywatności</strong>, klauzule informacyjne, umowy powierzenia danych. Jeśli macie landing page z formularzem — zgody marketingowe.</p>
+    </div>
+
+    <div class="card warning">
+        <div class="card-title">⏰ Nie zakładajcie pod koniec miesiąca!</div>
+        <p>Jeśli planujecie estoński CIT — ZAW-RD trzeba złożyć do końca pierwszego miesiąca. Spółka założona 25. dnia miesiąca = tylko 5 dni na formalności. Lepiej: początek miesiąca.</p>
+    </div>
+</section>
+
+<!-- SEKCJA 11: CHECKLIST -->
+<section id="checklist">
+    <h2>11. Checklist — kompletna lista</h2>
+
+    <h3>Przed rejestracją</h3>
+    <ul class="checklist">
+        <li>Ustalić podział udziałów (50/50 czy inaczej?)</li>
+        <li>Ustalić skład zarządu i sposób reprezentacji</li>
+        <li>Wybrać siedzibę (miejscowość + adres)</li>
+        <li>Ustalić kody PKD</li>
+        <li>Sprawdzić unikalność nazwy w KRS</li>
+        <li>Zdecydować: S24 czy notariusz?</li>
+        <li>Przygotować kapitał zakładowy (min. 5 000 zł)</li>
+    </ul>
+
+    <h3>Rejestracja</h3>
+    <ul class="checklist">
+        <li>Założyć konto na portalu S24 (profil zaufany)</li>
+        <li>Wypełnić i podpisać umowę spółki online</li>
+        <li>Złożyć wniosek + opłacić 350 zł</li>
+        <li>Otrzymać wpis do KRS (NIP + REGON)</li>
+    </ul>
+
+    <h3>Po rejestracji (z terminami)</h3>
+    <ul class="checklist">
+        <li>Wpłacić kapitał zakładowy (dzień 0)</li>
+        <li>Otworzyć konto bankowe (ASAP, najlepiej w ciągu tygodnia)</li>
+        <li>Złożyć PCC-3 + zapłacić PCC (14 dni)</li>
+        <li>Zgłosić CRBR — beneficjenci rzeczywiści (14 dni!)</li>
+        <li>Złożyć NIP-8 (21 dni / 7 dni po koncie bankowym)</li>
+        <li>Podpisać umowę z biurem rachunkowym</li>
+        <li>Złożyć VAT-R (jeśli chcecie VAT — przed 1. fakturą)</li>
+        <li>Złożyć ZAW-RD (jeśli estoński CIT — koniec 1. miesiąca)</li>
+        <li>Uchwała o pełnomocniku do umów z zarządem</li>
+        <li>Sporządzić księgę udziałów</li>
+        <li>Zawrzeć umowę najmu/użyczenia siedziby</li>
+        <li>Przyjąć politykę rachunkowości (uchwała)</li>
+        <li>Uchwała o uproszczonych sprawozdaniach</li>
+    </ul>
+</section>
+
+<!-- SEKCJA 12: REKOMENDACJA -->
+<section id="reko">
+    <h2>12. Rekomendacja końcowa</h2>
+
+    <div class="reco">
+        <h3>🎯 Plan dla Numerika sp. z o.o.</h3>
+        <ul style="padding-left: 1rem; color: #ccc; line-height: 2;">
+            <li>✅ <strong>Forma:</strong> Sp. z o.o.</li>
+            <li>✅ <strong>Rejestracja:</strong> Notariusz (przy 50/50) lub S24 (przy nierównym podziale)</li>
+            <li>✅ <strong>CIT:</strong> Klasyczny 9% na start</li>
+            <li>✅ <strong>VAT:</strong> Zwolnienie podmiotowe na start (do 200k), rejestracja VAT gdy przewidujecie szybkie przekroczenie lub duże zakupy</li>
+            <li>✅ <strong>Biuro rachunkowe:</strong> Od dnia 1 — pełna księgowość obowiązkowa</li>
+            <li>✅ <strong>Udziały:</strong> Rozważyć 51/49 lub mechanizm arbitrażowy w umowie</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📞 Następne kroki</div>
+        <p>1. Bartosz + Dominika: ustalić podział udziałów i zarząd<br>
+        2. Wybrać adres siedziby<br>
+        3. Wybrać biuro rachunkowe (mogą też pomóc z rejestracją)<br>
+        4. Zarejestrować spółkę<br>
+        5. Odpalić timery — 14 dni na CRBR i PCC-3!</p>
+    </div>
+</section>
+
+<footer>
+    <p>Research & konsultacja: <strong>Wiki</strong> (Claude Opus) + <strong>Misty</strong> (Gemini) · 26.02.2026</p>
+    <p>Źródła: infor.pl · biznes.gov.pl · fakturomania.pl · mistrzpodatkow.pl · kancelaria-firost.pl</p>
+    <p style="margin-top: 0.5rem;">⚠️ Dokument ma charakter informacyjny, nie stanowi porady prawnej ani podatkowej.<br>Przed podjęciem decyzji skonsultuj się z prawnikiem i/lub doradcą podatkowym.</p>
+    <p style="margin-top: 1rem;"><a href="https://numerika.ai">numerika.ai</a></p>
+</footer>
+
+</div>
+</body>
+</html>
