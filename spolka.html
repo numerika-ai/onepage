@@ -157,6 +157,37 @@
             border: 1px solid #1e1e2e; border-top: none;
             border-radius: 0 0 8px 8px;
         }
+
+        /* Doc list */
+        .doc-list { list-style: none; padding: 0; }
+        .doc-list li {
+            padding: 0.8rem 1rem 0.8rem 3.5rem; position: relative;
+            border-bottom: 1px solid #1a1a2a; margin-bottom: 0.2rem;
+        }
+        .doc-list li .doc-icon {
+            position: absolute; left: 0.5rem; top: 0.8rem;
+            font-size: 1.3rem;
+        }
+        .doc-list li strong { color: #e0e0e0; display: block; margin-bottom: 0.2rem; }
+        .doc-list li .doc-note { color: #888; font-size: 0.85rem; }
+        .doc-list li .doc-who { color: #a78bfa; font-size: 0.8rem; font-weight: 600; }
+
+        /* S24 step detail */
+        .s24-step {
+            background: #111118; border: 1px solid #1e1e2e; border-radius: 12px;
+            padding: 1.2rem 1.5rem; margin-bottom: 1rem;
+        }
+        .s24-step .step-num {
+            display: inline-block; width: 2.2rem; height: 2.2rem; border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            color: #fff; text-align: center; line-height: 2.2rem;
+            font-weight: 700; font-size: 1rem; margin-right: 0.8rem;
+            vertical-align: middle;
+        }
+        .s24-step h3 { display: inline; vertical-align: middle; margin: 0; }
+        .s24-step p { margin-top: 0.8rem; }
+        .s24-step ul { padding-left: 1.2rem; margin-top: 0.5rem; }
+        .s24-step ul li { color: #bbb; margin-bottom: 0.3rem; }
     </style>
 </head>
 <body>
@@ -166,7 +197,7 @@
     <h1>Numerika sp. z o.o.</h1>
     <div class="subtitle">Przewodnik zakładania spółki — krok po kroku</div>
     <div class="meta">Wspólnicy: Bartosz Paszek & Dominika Zrobek · Branża: Szkolenia z Kompetencji Cyfrowych</div>
-    <div class="meta">Research: 26.02.2026 · Źródła: infor.pl, biznes.gov.pl, fakturomania.pl, mistrzpodatkow.pl</div>
+    <div class="meta">Research: 26.02.2026 · Konsultacja: Wiki (Claude Opus) + Misty (Gemini)</div>
 </header>
 
 <nav>
@@ -174,7 +205,8 @@
     <ul>
         <li><a href="#forma">Wybór formy prawnej</a></li>
         <li><a href="#przed">Co ustalić przed rejestracją</a></li>
-        <li><a href="#rejestracja">Rejestracja krok po kroku</a></li>
+        <li><a href="#s24-guide">S24 — szczegółowy przewodnik</a></li>
+        <li><a href="#dokumenty">Wszystkie dokumenty i załączniki</a></li>
         <li><a href="#timeline">Obowiązki po rejestracji</a></li>
         <li><a href="#biezace">Obowiązki bieżące</a></li>
         <li><a href="#vat">VAT — szkolenia</a></li>
@@ -182,8 +214,7 @@
         <li><a href="#koszty">Koszty startowe</a></li>
         <li><a href="#linki">Gdzie to zgłosić — linki</a></li>
         <li><a href="#tips">Dodatkowe wskazówki</a></li>
-        <li><a href="#checklist">Checklist</a></li>
-        <li><a href="#reko">Rekomendacja końcowa</a></li>
+        <li><a href="#checklist">Mega-checklist</a></li>
     </ul>
 </nav>
 
@@ -204,7 +235,7 @@
 
     <div class="card highlight">
         <div class="card-title">💡 Dlaczego sp. z o.o. dla Numerika?</div>
-        <p>Branża szkoleniowa to odpowiedzialność za jakość usług, potencjalne roszczenia, kontrakty B2B z korporacjami. Sp. z o.o. daje ochronę majątku prywatnego i profesjonalny wizerunek — kluczowe przy skalowaniu do dużych klientów.</p>
+        <p>Branża szkoleniowa to odpowiedzialność za jakość usług, potencjalne roszczenia, kontrakty B2B z korporacjami. Sp. z o.o. daje ochronę majątku prywatnego i profesjonalny wizerunek — kluczowe przy skalowaniu do dużych klientów. Ułatwia też wejście do BUR (Baza Usług Rozwojowych), co daje dostęp do dofinansowań.</p>
     </div>
 </section>
 
@@ -216,12 +247,12 @@
         <table>
             <tr><th>Element</th><th>Do ustalenia</th><th>Uwagi</th></tr>
             <tr><td><strong>Nazwa</strong></td><td>Numerika sp. z o.o.</td><td>Sprawdzić unikalność w <a href="https://ekrs.ms.gov.pl/">wyszukiwarce KRS</a></td></tr>
-            <tr><td><strong>Siedziba</strong></td><td>Miejscowość (np. Bielsko-Biała)</td><td>Adres podaje się osobno we wniosku</td></tr>
+            <tr><td><strong>Siedziba</strong></td><td>Miejscowość (np. Warszawa)</td><td>Dokładny adres podaje się dopiero we wniosku</td></tr>
             <tr><td><strong>Kapitał</strong></td><td>Min. 5 000 zł</td><td>Rozważyć 10 000 zł (lepszy wizerunek)</td></tr>
             <tr><td><strong>Udziały</strong></td><td>Podział między Bartosza i Dominikę</td><td>Min. wartość nominalna udziału = 50 zł</td></tr>
             <tr><td><strong>Zarząd</strong></td><td>Kto? Oboje? Jedna osoba?</td><td>Patrz: reprezentacja</td></tr>
             <tr><td><strong>Reprezentacja</strong></td><td>Jednoosobowa vs łączna</td><td>Jednoosobowa = wygodniejsza operacyjnie</td></tr>
-            <tr><td><strong>PKD</strong></td><td>85.59.B, 62.09.Z, 63.11.Z, 85.60.Z</td><td>Max 10 kodów, lepiej szeroko</td></tr>
+            <tr><td><strong>PKD</strong></td><td>85.59.B, 62.09.Z, 63.11.Z, 85.60.Z</td><td>Max 10 kodów w KRS (w umowie więcej)</td></tr>
             <tr><td><strong>Rok obrotowy</strong></td><td>Można przedłużyć do końca następnego roku</td><td>Jeśli zakładacie w II półroczu</td></tr>
         </table>
     </div>
@@ -233,64 +264,225 @@
         <ul style="padding-left: 1.2rem; color: #bbb;">
             <li><strong>Nierówny podział</strong> — np. 51/49%</li>
             <li><strong>Mechanizm rozjemczy</strong> — wyznaczony arbiter (prawnik/zaufana osoba)</li>
-            <li><strong>Umowa wspólników</strong> (shareholders' agreement) — osobny dokument z zasadami wyjścia, call/put option, drag-along/tag-along</li>
-            <li><strong>Notariusz zamiast S24</strong> — pozwala wpisać te mechanizmy do umowy</li>
+            <li><strong>Umowa wspólników</strong> (shareholders' agreement) — osobny dokument</li>
+            <li><strong>Call/Put Option</strong> — prawo odkupu udziałów</li>
+            <li><strong>Drag-along / Tag-along</strong> — zasady przy sprzedaży inwestorowi</li>
         </ul>
     </div>
 </section>
 
-<!-- SEKCJA 3: REJESTRACJA -->
-<section id="rejestracja">
-    <h2>3. Rejestracja — S24 vs Notariusz</h2>
+<!-- SEKCJA 3: S24 SZCZEGÓŁOWY PRZEWODNIK -->
+<section id="s24-guide">
+    <h2>3. Rejestracja przez S24 — szczegółowy przewodnik</h2>
 
-    <div class="compare-grid">
-        <div class="card">
-            <div class="card-title">🖥️ S24 (online)</div>
-            <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
-                <li>Koszt: <strong>350 zł</strong></li>
-                <li>Czas: <strong>1-7 dni</strong></li>
-                <li>Profil zaufany lub podpis kwalifikowany</li>
-                <li>Gotowy wzorzec umowy (ograniczony)</li>
-                <li>Kapitał tylko w gotówce</li>
-                <li>Brak indywidualnych zapisów</li>
-            </ul>
-        </div>
-        <div class="card highlight">
-            <div class="card-title">📜 Notariusz (tradycyjna)</div>
-            <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
-                <li>Koszt: <strong>~1 100-1 600 zł</strong></li>
-                <li>Czas: <strong>2-4 tygodnie</strong></li>
-                <li>Pełna elastyczność umowy</li>
-                <li>Aport możliwy</li>
-                <li>Mechanizmy zabezpieczające (call/put, arbitraż)</li>
-                <li>Zalecany przy 50/50</li>
-            </ul>
+    <div class="card highlight">
+        <div class="card-title">🖥️ Portal S24 — co to jest?</div>
+        <p>System teleinformatyczny Ministerstwa Sprawiedliwości do rejestracji spółek online. Adres: <a href="https://ekrs.ms.gov.pl/s24/strona-glowna">ekrs.ms.gov.pl/s24</a>. Koszt: <strong>350 zł</strong>. Czas rejestracji: <strong>1-7 dni roboczych</strong>.</p>
+        <p style="color: #888; font-size: 0.9rem;">Wymagany: profil zaufany (ePUAP) lub kwalifikowany podpis elektroniczny — dla KAŻDEGO wspólnika.</p>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">1</span>
+        <h3>Załóż konto na portalu S24</h3>
+        <p>Wejdź na <a href="https://ekrs.ms.gov.pl/s24/strona-glowna">ekrs.ms.gov.pl/s24</a> i utwórz konto. Do rejestracji potrzebujesz adresu e-mail. <strong>Oboje wspólnicy</strong> (Bartosz i Dominika) muszą mieć swoje konta.</p>
+        <ul>
+            <li>Wymagany: <strong>Profil Zaufany</strong> lub <strong>podpis kwalifikowany</strong></li>
+            <li>Profil Zaufany zakłada się za darmo przez bankowość elektroniczną</li>
+        </ul>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">2</span>
+        <h3>Utwórz nowe przedsiębiorstwo</h3>
+        <p>Po zalogowaniu, w zakładce „Moje Przedsiębiorstwa" kliknij „Nowe przedsiębiorstwo" → wybierz „Spółka z o.o."</p>
+        <ul>
+            <li>Podaj <strong>nazwę spółki</strong>: „Numerika" (system doda „sp. z o.o.")</li>
+            <li>Podaj <strong>siedzibę</strong> (miejscowość, np. Warszawa) — dokładny adres dopiero we wniosku</li>
+            <li>Sprawdź wcześniej w <a href="https://ekrs.ms.gov.pl/">wyszukiwarce KRS</a>, czy nazwa jest wolna</li>
+        </ul>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">3</span>
+        <h3>Wypełnij umowę spółki (kreator)</h3>
+        <p>W zakładce „Dokumenty" → „Nowy" → „Umowa spółki z o.o.". Kreator prowadzi krok po kroku:</p>
+        <ul>
+            <li><strong>§1 Data umowy</strong> — dzisiejsza data</li>
+            <li><strong>§1 Wspólnicy</strong> — dodaj dane Bartosza i Dominiki (imię, nazwisko, PESEL, adres)</li>
+            <li><strong>§4 Kody PKD</strong> — wybierz główny (np. 85.59.B) + dodatkowe (62.09.Z, 63.11.Z, 85.60.Z)</li>
+            <li><strong>§5-6 Udziały</strong> — wartość nominalna udziału (min. 50 zł) × liczba udziałów per wspólnik. Np. 100 udziałów × 50 zł = 5 000 zł kapitału. Podział: np. 50/50 lub 51/49</li>
+            <li><strong>§8 Zbycie udziałów</strong> — czy wymaga zgody zarządu? (zalecane: TAK)</li>
+            <li><strong>§9</strong> — automatyczne: „Udziały pokrywane wkładami pieniężnymi" (w S24 brak aportu)</li>
+            <li><strong>§10-14 Warianty</strong> — umorzenie udziałów, kapitał rezerwowy/zapasowy, podział zysku</li>
+            <li><strong>§15 Zarząd + reprezentacja</strong> — wskaż członków zarządu i sposób reprezentacji (jednoosobowa/łączna)</li>
+            <li><strong>§16-17</strong> — Rada Nadzorcza (opcjonalna), czas trwania spółki</li>
+        </ul>
+        <div class="card warning" style="margin-top: 1rem;">
+            <div class="card-title">⚠️ Ważne decyzje w umowie</div>
+            <p><strong>Reprezentacja:</strong> Przy 2-osobowym zarządzie wybierz „każdy członek zarządu samodzielnie" — łączna reprezentacja paraliżuje działanie przy konflikcie.<br>
+            <strong>Zbycie udziałów:</strong> Wybierz „za zgodą zarządu" — chroni przed niechcianym trzecim wspólnikiem.</p>
         </div>
     </div>
 
-    <h3>Procedura krok po kroku (S24)</h3>
-    <ol class="steps">
-        <li>Ustal z Dominiką: udziały, zarząd, siedziba, kody PKD</li>
-        <li>Sprawdź nazwę „Numerika" w <a href="https://ekrs.ms.gov.pl/">wyszukiwarce KRS</a></li>
-        <li>Załóż konto na <a href="https://ekrs.ms.gov.pl/s24/strona-glowna">portalu S24</a> (profil zaufany)</li>
-        <li>Wypełnij umowę spółki online — podpiszcie ją elektronicznie</li>
-        <li>Złóż wniosek o wpis do KRS + opłać 350 zł</li>
-        <li>Czekaj na wpis sądu (1-7 dni roboczych)</li>
-        <li>Po wpisie — wpłać kapitał zakładowy (gotówka do kasy)</li>
-        <li>Otwórz konto bankowe w ciągu tygodnia</li>
-        <li>Rozpocznij zgłoszenia (PCC-3, CRBR, NIP-8) — patrz timeline</li>
-    </ol>
+    <div class="s24-step">
+        <span class="step-num">4</span>
+        <h3>Podpisz umowę spółki</h3>
+        <p>Po wypełnieniu umowy → kliknij „Podpisy". <strong>Oboje wspólnicy</strong> muszą podpisać elektronicznie (Profil Zaufany lub podpis kwalifikowany). Każdy loguje się na swoje konto i podpisuje.</p>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">5</span>
+        <h3>Wygeneruj i podpisz załączniki (dokumenty wewnętrzne S24)</h3>
+        <p>W zakładce „Dokumenty" → „Nowy" utwórz kolejno:</p>
+        <ul>
+            <li><strong>Lista wspólników</strong> — dane wczytane z umowy, wpisz datę → podpisuje <strong>zarząd</strong></li>
+            <li><strong>Oświadczenie o wniesieniu kapitału zakładowego</strong> — wpisz datę → podpisuje <strong>zarząd</strong></li>
+        </ul>
+        <p style="color: #888; font-size: 0.9rem;">Opcjonalnie: Uchwała o powołaniu prokury (tylko jeśli powoływacie prokurenta)</p>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">6</span>
+        <h3>Przygotuj i wgraj dokumenty zewnętrzne</h3>
+        <p>Te dokumenty <strong>tworzysz samodzielnie</strong> (np. w Wordzie/Google Docs) i wgrywasz do S24 przyciskiem „Wczytaj":</p>
+
+        <ul class="doc-list">
+            <li>
+                <span class="doc-icon">📄</span>
+                <strong>Oświadczenie, czy spółka jest cudzoziemcem</strong>
+                <span class="doc-note">Oświadczenie, że spółka NIE jest cudzoziemcem w rozumieniu ustawy z 24.03.1920. Spółka jest cudzoziemcem gdy >50% udziałów należy do cudzoziemców.</span>
+                <span class="doc-who">Podpisuje: zarząd</span>
+            </li>
+            <li>
+                <span class="doc-icon">📄</span>
+                <strong>Lista adresów do doręczeń wspólników (osób uprawnionych do powołania zarządu)</strong>
+                <span class="doc-note">Imię, nazwisko + adres do doręczeń każdego wspólnika. Jeśli adres poza UE — trzeba wyznaczyć pełnomocnika do doręczeń w Polsce.</span>
+                <span class="doc-who">Podpisuje: zarząd</span>
+            </li>
+            <li>
+                <span class="doc-icon">📄</span>
+                <strong>Lista adresów do doręczeń członków zarządu</strong>
+                <span class="doc-note">Imię, nazwisko + adres do doręczeń każdego członka zarządu. Jeśli adres poza UE — pełnomocnik do doręczeń w Polsce.</span>
+                <span class="doc-who">Podpisuje: zarząd</span>
+            </li>
+            <li>
+                <span class="doc-icon">📄</span>
+                <strong>Oświadczenie członków zarządu o wyrażeniu zgody na powołanie + adres do doręczeń</strong>
+                <span class="doc-note">Każdy członek zarządu osobno oświadcza zgodę na pełnienie funkcji. Nie wymagane jeśli osoba podpisała wniosek o wpis lub udzieliła pełnomocnictwa.</span>
+                <span class="doc-who">Podpisuje: każdy członek zarządu osobno</span>
+            </li>
+            <li>
+                <span class="doc-icon">📄</span>
+                <strong>Księga udziałów</strong>
+                <span class="doc-note">Informacje o udziałowcach, liczbie i wartości udziałów. Sporządź w edytorze tekstu.</span>
+                <span class="doc-who">Podpisuje: zarząd</span>
+            </li>
+        </ul>
+
+        <p style="color: #f59e0b; font-size: 0.9rem; margin-top: 0.5rem;">💡 Darmowe generatory tych dokumentów znajdziesz na <a href="https://24wirtualne-biuro.pl/blog/dokumenty-potrzebne-do-rejestracji-sp%C3%B3%C5%82ki-z-oo-w-systemie-s24">24wirtualne-biuro.pl</a></p>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">7</span>
+        <h3>Wypełnij wniosek o wpis do KRS</h3>
+        <p>W zakładce „Wnioski" → „Nowy wniosek". System poprosi o:</p>
+        <ul>
+            <li>Wybór <strong>wszystkich</strong> podpisanych dokumentów jako załączniki</li>
+            <li><strong>Sąd rejestrowy</strong> — właściwy dla siedziby spółki</li>
+            <li><strong>Dokładny adres</strong> spółki (ulica, numer, kod pocztowy)</li>
+            <li><strong>Dane wspólników</strong> (weryfikacja — w KRS ujawnia się tylko wspólników z ≥10% udziałów)</li>
+            <li><strong>Skład zarządu</strong> i ewentualnie Rady Nadzorczej</li>
+            <li><strong>PKD do KRS</strong> — max 10 kodów, w tym 1 przeważający</li>
+            <li><strong>Dane do e-Doręczeń</strong> — od 01.01.2025 wymagane przy rejestracji</li>
+        </ul>
+        <p>Wniosek podpisuje <strong>zarząd</strong> zgodnie ze sposobem reprezentacji.</p>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">8</span>
+        <h3>Opłać i wyślij wniosek</h3>
+        <p>Po podpisaniu wniosku → system przekieruje do płatności:</p>
+        <ul>
+            <li><strong>250 zł</strong> — opłata sądowa za wpis</li>
+            <li><strong>100 zł</strong> — ogłoszenie w Monitorze Sądowym i Gospodarczym</li>
+            <li>~0,39 zł — prowizja operatora płatności</li>
+            <li><strong>Łącznie: ~350,39 zł</strong></li>
+        </ul>
+        <div class="card danger" style="margin-top: 0.5rem;">
+            <div class="card-title">⏰ Masz 7 dni na wysłanie!</div>
+            <p>Po podpisaniu wniosku musisz opłacić i wysłać go w ciągu <strong>7 dni</strong>. Po tym terminie dokumenty tracą ważność i trzeba wszystko powtórzyć.</p>
+        </div>
+    </div>
+
+    <div class="s24-step">
+        <span class="step-num">9</span>
+        <h3>Czekaj na wpis + monitoruj</h3>
+        <p>Status wniosku monitorujesz w S24 → zakładka „Wnioski". Sąd powinien rozpatrzyć w ciągu <strong>1-7 dni roboczych</strong> (instrukcyjnie: 1 dzień).</p>
+        <ul>
+            <li>Po pozytywnej decyzji → spółka otrzymuje <strong>NIP, REGON, numer KRS</strong></li>
+            <li>Korespondencja z sądu pojawia się na koncie w S24</li>
+            <li>Jeśli sąd zwróci wniosek (braki/błędy) — popraw i złóż ponownie</li>
+        </ul>
+    </div>
+
+    <div class="card warning">
+        <div class="card-title">🆕 e-Doręczenia (od 01.04.2025)</div>
+        <p>Od 1 kwietnia 2025 wszystkie podmioty w KRS muszą mieć <strong>adres do e-Doręczeń</strong>. Przy nowej rejestracji system S24 zapyta o dane do założenia skrzynki. To elektroniczny odpowiednik listu poleconego — korespondencja z urzędami będzie przychodzić tutaj. <a href="https://www.biznes.gov.pl/pl/portal/004495">Więcej na biznes.gov.pl</a></p>
+    </div>
 </section>
 
-<!-- SEKCJA 4: TIMELINE PO REJESTRACJI -->
+<!-- SEKCJA 4: LISTA WSZYSTKICH DOKUMENTÓW -->
+<section id="dokumenty">
+    <h2>4. Kompletna lista dokumentów</h2>
+
+    <h3>📋 Dokumenty generowane w S24 (kreator)</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>#</th><th>Dokument</th><th>Kto podpisuje</th><th>Status</th></tr>
+            <tr><td>1</td><td><strong>Umowa spółki z o.o.</strong></td><td>Wszyscy wspólnicy</td><td>Obowiązkowy</td></tr>
+            <tr><td>2</td><td><strong>Lista wspólników</strong></td><td>Zarząd (wg reprezentacji)</td><td>Obowiązkowy</td></tr>
+            <tr><td>3</td><td><strong>Oświadczenie o wniesieniu kapitału zakładowego</strong></td><td>Zarząd (wg reprezentacji)</td><td>Obowiązkowy</td></tr>
+            <tr><td>4</td><td><strong>Uchwała o powołaniu prokury</strong></td><td>Zarząd (wg reprezentacji)</td><td>Opcjonalny*</td></tr>
+        </table>
+    </div>
+    <p style="color: #888; font-size: 0.85rem;">*Tylko jeśli powoływacie prokurenta</p>
+
+    <h3>📎 Dokumenty do samodzielnego przygotowania (wgrywane do S24)</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>#</th><th>Dokument</th><th>Kto podpisuje</th><th>Status</th></tr>
+            <tr><td>5</td><td><strong>Oświadczenie, czy spółka jest cudzoziemcem</strong></td><td>Zarząd</td><td>Obowiązkowy</td></tr>
+            <tr><td>6</td><td><strong>Lista adresów do doręczeń wspólników</strong> (osób uprawnionych do powołania zarządu)</td><td>Zarząd</td><td>Obowiązkowy</td></tr>
+            <tr><td>7</td><td><strong>Lista adresów do doręczeń członków zarządu</strong></td><td>Zarząd</td><td>Obowiązkowy</td></tr>
+            <tr><td>8</td><td><strong>Oświadczenie o zgodzie na powołanie + adres do doręczeń</strong> (każdy członek zarządu osobno)</td><td>Każdy osobno</td><td>Obowiązkowy**</td></tr>
+            <tr><td>9</td><td><strong>Księga udziałów</strong></td><td>Zarząd</td><td>Zalecany</td></tr>
+            <tr><td>10</td><td><strong>Zgoda prokurenta + adres</strong></td><td>Prokurent</td><td>Opcjonalny*</td></tr>
+        </table>
+    </div>
+    <p style="color: #888; font-size: 0.85rem;">**Nie wymagane jeśli osoba podpisuje wniosek lub udzieliła pełnomocnictwa do jego złożenia</p>
+
+    <h3>📝 Dokumenty po rejestracji (nie do S24)</h3>
+    <div class="table-wrap">
+        <table>
+            <tr><th>#</th><th>Dokument</th><th>Gdzie składać</th><th>Termin</th></tr>
+            <tr><td>11</td><td><strong>PCC-3</strong> (podatek od czynności cywilnoprawnych)</td><td>Urząd Skarbowy</td><td>14 dni</td></tr>
+            <tr><td>12</td><td><strong>NIP-8</strong> (dane uzupełniające)</td><td>Urząd Skarbowy</td><td>21 dni (7 po koncie)</td></tr>
+            <tr><td>13</td><td><strong>CRBR</strong> (beneficjenci rzeczywiści)</td><td>crbr.podatki.gov.pl</td><td>14 dni</td></tr>
+            <tr><td>14</td><td><strong>VAT-R</strong> (rejestracja VAT)</td><td>Urząd Skarbowy</td><td>Przed 1. fakturą</td></tr>
+            <tr><td>15</td><td><strong>ZAW-RD</strong> (estoński CIT)</td><td>Urząd Skarbowy</td><td>Koniec 1. miesiąca</td></tr>
+        </table>
+    </div>
+</section>
+
+<!-- SEKCJA 5: TIMELINE PO REJESTRACJI -->
 <section id="timeline">
-    <h2>4. Obowiązki po rejestracji — Timeline</h2>
+    <h2>5. Obowiązki po rejestracji — Timeline</h2>
 
     <div class="timeline">
         <div class="timeline-item urgent">
             <span class="badge red">DZIEŃ 0</span>
             <strong>Wpłata kapitału zakładowego</strong>
-            <p>W dniu podpisania umowy. Gotówka do kasy + raport kasowy. Przy 5 000 zł — po prostu wpłać.</p>
+            <p>W dniu podpisania umowy. Gotówka do kasy + raport kasowy. Nie trzeba przelewu — wystarczy gotówka. Przy 5 000 zł — po prostu wpłać.</p>
         </div>
 
         <div class="timeline-item urgent">
@@ -306,33 +498,33 @@
         </div>
 
         <div class="timeline-item important">
-            <span class="badge orange">7 DNI</span>
+            <span class="badge orange">ASAP</span>
             <strong>Konto bankowe</strong>
-            <p>Otwórz ASAP — potrzebna umowa spółki z KRS. Wiele banków pozwala to zrobić online. Po otwarciu konta masz 7 dni (nie 21!) na NIP-8.</p>
+            <p>Otwórz jak najszybciej — potrzebna umowa spółki. Wiele banków (mBank, ING, Nest) pozwala to zrobić online. Po otwarciu konta termin na NIP-8 skraca się do 7 dni!</p>
         </div>
 
         <div class="timeline-item important">
             <span class="badge orange">21 DNI (lub 7)</span>
             <strong>NIP-8 — Dane uzupełniające</strong>
-            <p>Formularz NIP-8 do Urzędu Skarbowego. Numer konta bankowego, dane płatnika ZUS. 21 dni od KRS, ale <strong>7 dni od otwarcia konta</strong>.</p>
+            <p>Formularz NIP-8 do Urzędu Skarbowego. Numer konta bankowego, dane płatnika ZUS. 21 dni od KRS, ale <strong>7 dni od otwarcia konta bankowego</strong>.</p>
         </div>
 
         <div class="timeline-item normal">
             <span class="badge green">PRZED DZIAŁALNOŚCIĄ</span>
             <strong>VAT-R (jeśli chcecie być VAT-owcami)</strong>
-            <p>Formularz VAT-R do US. Złóż przed pierwszą fakturą sprzedaży. Nie jest obowiązkowy jeśli obrót &lt; 200 000 zł/rok.</p>
+            <p>Formularz VAT-R do US. Złóż przed pierwszą fakturą sprzedaży. Nie jest obowiązkowy jeśli obrót &lt; 200 000 zł/rok i nie wykonujecie usług doradczych.</p>
         </div>
 
         <div class="timeline-item normal">
             <span class="badge green">KONIEC 1. MIESIĄCA</span>
             <strong>ZAW-RD (estoński CIT)</strong>
-            <p>Tylko jeśli wybierycie estoński CIT. Formularz do US do końca pierwszego miesiąca od rejestracji.</p>
+            <p>Tylko jeśli wybieracie estoński CIT. Formularz do US do końca pierwszego miesiąca.</p>
         </div>
 
         <div class="timeline-item normal">
             <span class="badge blue">ASAP</span>
-            <strong>Biuro rachunkowe</strong>
-            <p>Sp. z o.o. = obowiązkowa pełna księgowość od dnia wpisu. Podpisz umowę z biurem rachunkowym jak najszybciej.</p>
+            <strong>Biuro rachunkowe + e-Doręczenia</strong>
+            <p>Pełna księgowość obowiązkowa od dnia wpisu. Podpisz umowę z biurem rachunkowym. Aktywuj skrzynkę e-Doręczeń.</p>
         </div>
     </div>
 
@@ -347,12 +539,13 @@
         <li>Podpisanie umowy z biurem rachunkowym</li>
         <li>Uchwała o uproszczonych sprawozdaniach (mała jednostka)</li>
         <li>Polityka rachunkowości (uchwała zarządu)</li>
+        <li>Zawiadomienie o osobie odpowiedzialnej za obliczanie podatków</li>
     </ul>
 </section>
 
-<!-- SEKCJA 5: OBOWIĄZKI BIEŻĄCE -->
+<!-- SEKCJA 6: OBOWIĄZKI BIEŻĄCE -->
 <section id="biezace">
-    <h2>5. Obowiązki bieżące (cykliczne)</h2>
+    <h2>6. Obowiązki bieżące (cykliczne)</h2>
 
     <h3>Miesięczne</h3>
     <div class="table-wrap">
@@ -378,40 +571,41 @@
     </div>
 </section>
 
-<!-- SEKCJA 6: VAT -->
+<!-- SEKCJA 7: VAT -->
 <section id="vat">
-    <h2>6. VAT — szkolenia z kompetencji cyfrowych</h2>
+    <h2>7. VAT — szkolenia z kompetencji cyfrowych</h2>
 
     <div class="card warning">
-        <div class="card-title">⚠️ Szkolenia z „kompetencji cyfrowych" (Excel, AI, narzędzia) zazwyczaj = VAT 23%</div>
-        <p><strong>Zwolnienie przedmiotowe</strong> (art. 43 ust. 1 pkt 29 ustawy o VAT) dotyczy głównie szkoleń zawodowych finansowanych w min. 70% ze środków publicznych (KFS, BUR). Czysto komercyjne szkolenia B2C/B2B = VAT 23%.</p>
+        <div class="card-title">⚠️ Szkolenia z „kompetencji cyfrowych" (Excel, AI) = zazwyczaj VAT 23%</div>
+        <p><strong>Zwolnienie przedmiotowe</strong> (art. 43 ust. 1 pkt 29) dotyczy głównie szkoleń zawodowych finansowanych w min. 70% ze środków publicznych (KFS, BUR). Czysto komercyjne szkolenia B2C/B2B = VAT 23%.</p>
     </div>
 
     <details>
         <summary>Kiedy NIE trzeba rejestrować się do VAT?</summary>
         <div>
             <h4>Zwolnienie podmiotowe</h4>
-            <p>Jeśli obrót roczny &lt; 200 000 zł (proporcjonalnie do daty rejestracji — np. za pół roku limit = 100 000 zł). Nie musisz rejestrować VAT-R, ale na fakturach dodajesz adnotację o zwolnieniu.</p>
-            <h4>Zwolnienie przedmiotowe</h4>
-            <p>Usługi prywatnego nauczania na poziomie przedszkolnym/podstawowym/ponadpodstawowym/wyższym — jeśli Dominika jest nauczycielem. Ale „szkolenia cyfrowe" to osobna kategoria — zwykle nie kwalifikują się.</p>
+            <p>Obrót roczny &lt; 200 000 zł (proporcjonalnie — za pół roku limit = 100 000 zł). Faktura z adnotacją o zwolnieniu.</p>
+            <h4>Usługi doradcze = bez zwolnienia!</h4>
+            <p>Jeśli świadczycie usługi doradcze (konsulting) — automatyczny VAT bez względu na obrót. Przy szkoleniach raczej nie dotyczy, ale sprawdźcie z księgową.</p>
         </div>
     </details>
 
     <details>
-        <summary>Kiedy WARTO zarejestrować się od razu do VAT?</summary>
+        <summary>Kiedy WARTO zarejestrować VAT od razu?</summary>
         <div>
             <ul style="padding-left: 1rem; color: #bbb;">
-                <li>Planujecie duże zakupy na start (sprzęt, oprogramowanie) — odliczenie VAT</li>
-                <li>Klienci B2B (firmy) — i tak odliczają sobie VAT, więc cena netto się nie zmienia</li>
-                <li>Spodziewacie się szybko przekroczyć 200 000 zł obrotu</li>
+                <li>Planujecie szybko przekroczyć 200k obrotu</li>
+                <li>Duże zakupy na start (sprzęt, oprogramowanie) — odliczenie VAT</li>
+                <li>Klienci B2B — i tak odliczają VAT, więc cena netto jest taka sama</li>
             </ul>
+            <p style="margin-top: 0.5rem;"><strong>Misty rekomenduje:</strong> Jeśli target 2.9M zł — wejdźcie w VAT od razu. Limit 200k pęknie szybko.</p>
         </div>
     </details>
 </section>
 
-<!-- SEKCJA 7: CIT -->
+<!-- SEKCJA 8: CIT -->
 <section id="cit">
-    <h2>7. CIT — zwykły 9% vs estoński</h2>
+    <h2>8. CIT — zwykły 9% vs estoński</h2>
 
     <div class="compare-grid">
         <div class="card success">
@@ -420,168 +614,150 @@
                 <li>Prosty, niski podatek od dochodu</li>
                 <li>Brak wymogów zatrudnienia</li>
                 <li>9% CIT + 19% PIT od dywidendy</li>
-                <li>Idealne na start, zero komplikacji</li>
                 <li>Warunek: przychód &lt; 2 mln EUR</li>
             </ul>
         </div>
         <div class="card">
-            <div class="card-title">🏛️ Estoński CIT</div>
+            <div class="card-title">🏛️ Estoński CIT (później)</div>
             <ul style="padding-left: 1rem; color: #bbb; font-size: 0.95rem;">
-                <li>Podatek płacony dopiero przy wypłacie zysku</li>
                 <li>0% jeśli reinwestujecie zyski</li>
-                <li>Wymaga: min. 3 pracowników na umowę o pracę</li>
-                <li>Lub: wynagrodzenia ≥ 3× średnia krajowa</li>
-                <li>Lepszy gdy: stały zespół + reinwestycja</li>
+                <li>Wymaga: min. 3 pracowników</li>
+                <li>Ma sens gdy zbudujecie zespół (Q3/Q4)</li>
             </ul>
         </div>
     </div>
-
-    <div class="reco">
-        <h3>💡 Rekomendacja</h3>
-        <p>Na start: <strong>CIT 9%</strong>. Estoński CIT ma sens gdy zbudujecie zespół (3+ osób). Przejście na estoński CIT możliwe w kolejnym roku podatkowym.</p>
-    </div>
 </section>
 
-<!-- SEKCJA 8: KOSZTY -->
+<!-- SEKCJA 9: KOSZTY -->
 <section id="koszty">
-    <h2>8. Koszty startowe</h2>
+    <h2>9. Koszty startowe</h2>
 
     <div class="table-wrap">
         <table>
             <tr><th>Pozycja</th><th>Kwota</th><th>Uwagi</th></tr>
-            <tr><td>Rejestracja S24</td><td><strong>350 zł</strong></td><td>250 zł sąd + 100 zł Monitor Sądowy</td></tr>
-            <tr><td>Kapitał zakładowy</td><td><strong>5 000 zł</strong> (min.)</td><td>Zostaje w spółce — to aktywa firmy</td></tr>
+            <tr><td>Rejestracja S24</td><td><strong>350 zł</strong></td><td>250 zł sąd + 100 zł Monitor</td></tr>
+            <tr><td>Kapitał zakładowy</td><td><strong>5 000 zł</strong> (min.)</td><td>Zostaje w spółce — to aktywa</td></tr>
             <tr><td>PCC (0,5% kapitału)</td><td><strong>~23 zł</strong></td><td>Podatek od czynności cywilnoprawnych</td></tr>
-            <tr><td>Biuro rachunkowe</td><td><strong>300-800 zł/mies.</strong></td><td>Pełna księgowość — obowiązkowa</td></tr>
-            <tr><td>Konto firmowe</td><td><strong>0-50 zł/mies.</strong></td><td>Wiele banków oferuje za darmo na start</td></tr>
+            <tr><td>Biuro rachunkowe</td><td><strong>300-800 zł/mies.</strong></td><td>Pełna księgowość obowiązkowa</td></tr>
+            <tr><td>Konto firmowe</td><td><strong>0-50 zł/mies.</strong></td><td>Wiele banków za darmo na start</td></tr>
             <tr><td>Adres siedziby</td><td><strong>50-200 zł/mies.</strong></td><td>Wirtualne biuro lub własny adres</td></tr>
             <tr style="background: #15151e;"><td><strong>Razem start</strong></td><td><strong>~5 400 zł</strong></td><td>Jednorazowo + ~400-1050 zł/mies.</td></tr>
         </table>
     </div>
-
-    <p style="color: #888; font-size: 0.9rem;">Jeśli wybierzecie notariusza zamiast S24: dodajcie ~700-1200 zł za akt notarialny.</p>
 </section>
 
-<!-- SEKCJA 9: LINKI -->
+<!-- SEKCJA 10: LINKI -->
 <section id="linki">
-    <h2>9. Gdzie to zgłosić — linki</h2>
-
+    <h2>10. Gdzie to zgłosić — linki</h2>
     <div class="card">
         <div class="table-wrap">
             <table>
-                <tr><th>Zgłoszenie</th><th>Gdzie</th></tr>
-                <tr><td><strong>KRS (rejestracja)</strong></td><td><a href="https://ekrs.ms.gov.pl/s24/strona-glowna">Portal S24</a> lub <a href="https://prs.ms.gov.pl/krs">Portal Rejestrów Sądowych</a></td></tr>
+                <tr><th>Zgłoszenie</th><th>Link</th></tr>
+                <tr><td><strong>Portal S24 (rejestracja)</strong></td><td><a href="https://ekrs.ms.gov.pl/s24/strona-glowna">ekrs.ms.gov.pl/s24</a></td></tr>
+                <tr><td><strong>Wyszukiwarka KRS</strong></td><td><a href="https://ekrs.ms.gov.pl/">ekrs.ms.gov.pl</a></td></tr>
                 <tr><td><strong>CRBR</strong></td><td><a href="https://crbr.podatki.gov.pl/">crbr.podatki.gov.pl</a></td></tr>
-                <tr><td><strong>NIP-8, PCC-3, VAT-R, ZAW-RD</strong></td><td>Urząd Skarbowy właściwy wg siedziby spółki</td></tr>
-                <tr><td><strong>ZUS</strong></td><td><a href="https://www.zus.pl/">PUE ZUS</a></td></tr>
-                <tr><td><strong>Sprawdzanie nazwy</strong></td><td><a href="https://ekrs.ms.gov.pl/">Wyszukiwarka KRS</a></td></tr>
-                <tr><td><strong>Mikrorachunek podatkowy</strong></td><td><a href="https://www.podatki.gov.pl/generator-mikrorachunku-podatkowego">Generator</a></td></tr>
-                <tr><td><strong>Biznes.gov.pl</strong></td><td><a href="https://www.biznes.gov.pl/pl/portal/ou1503">Wpis spółki do KRS</a></td></tr>
+                <tr><td><strong>e-Doręczenia</strong></td><td><a href="https://www.biznes.gov.pl/pl/portal/004495">biznes.gov.pl/e-doreczenia</a></td></tr>
+                <tr><td><strong>Mikrorachunek podatkowy</strong></td><td><a href="https://www.podatki.gov.pl/generator-mikrorachunku-podatkowego">podatki.gov.pl/generator</a></td></tr>
+                <tr><td><strong>NIP-8, PCC-3, VAT-R</strong></td><td>Urząd Skarbowy wg siedziby</td></tr>
+                <tr><td><strong>ZUS (PUE)</strong></td><td><a href="https://www.zus.pl/">zus.pl</a></td></tr>
+                <tr><td><strong>Generatory dokumentów</strong></td><td><a href="https://24wirtualne-biuro.pl/blog/dokumenty-potrzebne-do-rejestracji-sp%C3%B3%C5%82ki-z-oo-w-systemie-s24">24wirtualne-biuro.pl</a></td></tr>
+                <tr><td><strong>Biznes.gov.pl</strong></td><td><a href="https://www.biznes.gov.pl/pl/portal/ou1503">biznes.gov.pl/krs</a></td></tr>
             </table>
         </div>
     </div>
 </section>
 
-<!-- SEKCJA 10: TIPS -->
+<!-- SEKCJA 11: TIPS -->
 <section id="tips">
-    <h2>10. Dodatkowe wskazówki</h2>
+    <h2>11. Dodatkowe wskazówki (Misty + Wiki)</h2>
 
     <div class="card highlight">
         <div class="card-title">🛡️ ZUS wspólników</div>
-        <p>Przy <strong>dwóch wspólnikach</strong> unikacie obowiązkowego ZUS-u, który dotyczy jednoosobowych spółek z o.o. Każdy płaci ZUS tylko jeśli jest zatrudniony w spółce (umowa o pracę, zlecenie).</p>
+        <p>Przy <strong>dwóch wspólnikach</strong> unikacie obowiązkowego ZUS-u (dotyczy tylko jednoosobowych sp. z o.o.). Każdy płaci ZUS tylko jeśli jest zatrudniony w spółce.</p>
     </div>
 
     <div class="card highlight">
         <div class="card-title">💡 IP Box — 5% podatku</div>
-        <p>Jeśli tworzycie autorskie narzędzia, oprogramowanie, kursy — rozważcie <strong>IP Box</strong> (5% podatek od dochodów z własności intelektualnej). Wymaga prowadzenia ewidencji IP, ale oszczędności mogą być znaczne.</p>
+        <p>Jeśli tworzycie autorskie narzędzia, oprogramowanie, kursy — rozważcie <strong>IP Box</strong> (5% podatek od dochodów z IP). Wymaga ewidencji.</p>
     </div>
 
     <div class="card">
         <div class="card-title">🧾 Kasy fiskalne</div>
-        <p>Przy szkoleniach online + płatnościach przez Stripe/Przelewy24 — zazwyczaj możliwość <strong>zwolnienia z kasy fiskalnej</strong> (pełna ewidencja w systemie bankowym). Potwierdź z księgowością.</p>
+        <p>Szkolenia online + płatności Stripe/Przelewy24 — zazwyczaj zwolnienie z kasy fiskalnej (ewidencja w systemie bankowym).</p>
     </div>
 
     <div class="card">
         <div class="card-title">📋 RODO</div>
-        <p>Przy szkoleniach zbieracie dane uczestników — obowiązkowa <strong>polityka prywatności</strong>, klauzule informacyjne, umowy powierzenia danych. Jeśli macie landing page z formularzem — zgody marketingowe.</p>
+        <p>Zbieranie danych uczestników → polityka prywatności, klauzule informacyjne, zgody marketingowe na landing page.</p>
     </div>
 
     <div class="card warning">
         <div class="card-title">⏰ Nie zakładajcie pod koniec miesiąca!</div>
-        <p>Jeśli planujecie estoński CIT — ZAW-RD trzeba złożyć do końca pierwszego miesiąca. Spółka założona 25. dnia miesiąca = tylko 5 dni na formalności. Lepiej: początek miesiąca.</p>
+        <p>ZAW-RD (estoński CIT) do końca 1. miesiąca. Spółka z 25. dnia = 5 dni na formalności.</p>
+    </div>
+
+    <div class="card warning">
+        <div class="card-title">⚠️ Nawet nieaktywna spółka ma obowiązki</div>
+        <p>Nawet jeśli spółka nie prowadzi jeszcze działalności — od dnia wpisu do KRS musicie prowadzić pełną księgowość i składać sprawozdania.</p>
     </div>
 </section>
 
-<!-- SEKCJA 11: CHECKLIST -->
+<!-- SEKCJA 12: MEGA-CHECKLIST -->
 <section id="checklist">
-    <h2>11. Checklist — kompletna lista</h2>
+    <h2>12. Mega-Checklist</h2>
 
-    <h3>Przed rejestracją</h3>
+    <h3>🔵 Przed rejestracją</h3>
     <ul class="checklist">
         <li>Ustalić podział udziałów (50/50 czy inaczej?)</li>
         <li>Ustalić skład zarządu i sposób reprezentacji</li>
         <li>Wybrać siedzibę (miejscowość + adres)</li>
-        <li>Ustalić kody PKD</li>
-        <li>Sprawdzić unikalność nazwy w KRS</li>
-        <li>Zdecydować: S24 czy notariusz?</li>
+        <li>Ustalić kody PKD (główny + dodatkowe)</li>
+        <li>Sprawdzić unikalność nazwy „Numerika" w KRS</li>
+        <li>Oboje: założyć konto na S24 + mieć Profil Zaufany</li>
         <li>Przygotować kapitał zakładowy (min. 5 000 zł)</li>
+        <li>Przygotować 5 dokumentów zewnętrznych (patrz sekcja 4)</li>
     </ul>
 
-    <h3>Rejestracja</h3>
+    <h3>🟣 Rejestracja w S24</h3>
     <ul class="checklist">
-        <li>Założyć konto na portalu S24 (profil zaufany)</li>
-        <li>Wypełnić i podpisać umowę spółki online</li>
-        <li>Złożyć wniosek + opłacić 350 zł</li>
-        <li>Otrzymać wpis do KRS (NIP + REGON)</li>
+        <li>Utworzyć przedsiębiorstwo w S24</li>
+        <li>Wypełnić umowę spółki (kreator)</li>
+        <li>Podpisać umowę — oboje wspólnicy</li>
+        <li>Wygenerować listę wspólników → podpisać (zarząd)</li>
+        <li>Wygenerować oświadczenie o wniesieniu kapitału → podpisać (zarząd)</li>
+        <li>Wgrać oświadczenie o cudzoziemcu → podpisać</li>
+        <li>Wgrać listę adresów wspólników → podpisać</li>
+        <li>Wgrać listę adresów członków zarządu → podpisać</li>
+        <li>Wgrać oświadczenia o zgodzie na powołanie → podpisać</li>
+        <li>Wgrać księgę udziałów → podpisać</li>
+        <li>Wypełnić wniosek o wpis do KRS</li>
+        <li>Podpisać wniosek (zarząd)</li>
+        <li>Opłacić 350 zł i wysłać (w ciągu 7 dni!)</li>
     </ul>
 
-    <h3>Po rejestracji (z terminami)</h3>
+    <h3>🔴 Po rejestracji (z terminami)</h3>
     <ul class="checklist">
         <li>Wpłacić kapitał zakładowy (dzień 0)</li>
-        <li>Otworzyć konto bankowe (ASAP, najlepiej w ciągu tygodnia)</li>
-        <li>Złożyć PCC-3 + zapłacić PCC (14 dni)</li>
-        <li>Zgłosić CRBR — beneficjenci rzeczywiści (14 dni!)</li>
-        <li>Złożyć NIP-8 (21 dni / 7 dni po koncie bankowym)</li>
-        <li>Podpisać umowę z biurem rachunkowym</li>
-        <li>Złożyć VAT-R (jeśli chcecie VAT — przed 1. fakturą)</li>
-        <li>Złożyć ZAW-RD (jeśli estoński CIT — koniec 1. miesiąca)</li>
+        <li>Otworzyć konto bankowe (ASAP)</li>
+        <li>PCC-3 + zapłata PCC (14 dni od umowy)</li>
+        <li>CRBR — beneficjenci rzeczywiści (14 dni — kara do 1M zł!)</li>
+        <li>NIP-8 (21 dni / 7 dni po otwarciu konta)</li>
+        <li>Umowa z biurem rachunkowym</li>
+        <li>VAT-R (jeśli chcecie VAT — przed 1. fakturą)</li>
+        <li>ZAW-RD (estoński CIT — do końca 1. miesiąca)</li>
+        <li>Aktywacja e-Doręczeń</li>
         <li>Uchwała o pełnomocniku do umów z zarządem</li>
-        <li>Sporządzić księgę udziałów</li>
-        <li>Zawrzeć umowę najmu/użyczenia siedziby</li>
-        <li>Przyjąć politykę rachunkowości (uchwała)</li>
+        <li>Umowa najmu/użyczenia siedziby</li>
+        <li>Polityka rachunkowości (uchwała)</li>
         <li>Uchwała o uproszczonych sprawozdaniach</li>
+        <li>Zwrot kosztów rejestracji wspólnikowi</li>
+        <li>Zawiadomienie o osobie odpowiedzialnej za podatki</li>
     </ul>
-</section>
-
-<!-- SEKCJA 12: REKOMENDACJA -->
-<section id="reko">
-    <h2>12. Rekomendacja końcowa</h2>
-
-    <div class="reco">
-        <h3>🎯 Plan dla Numerika sp. z o.o.</h3>
-        <ul style="padding-left: 1rem; color: #ccc; line-height: 2;">
-            <li>✅ <strong>Forma:</strong> Sp. z o.o.</li>
-            <li>✅ <strong>Rejestracja:</strong> Notariusz (przy 50/50) lub S24 (przy nierównym podziale)</li>
-            <li>✅ <strong>CIT:</strong> Klasyczny 9% na start</li>
-            <li>✅ <strong>VAT:</strong> Zwolnienie podmiotowe na start (do 200k), rejestracja VAT gdy przewidujecie szybkie przekroczenie lub duże zakupy</li>
-            <li>✅ <strong>Biuro rachunkowe:</strong> Od dnia 1 — pełna księgowość obowiązkowa</li>
-            <li>✅ <strong>Udziały:</strong> Rozważyć 51/49 lub mechanizm arbitrażowy w umowie</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <div class="card-title">📞 Następne kroki</div>
-        <p>1. Bartosz + Dominika: ustalić podział udziałów i zarząd<br>
-        2. Wybrać adres siedziby<br>
-        3. Wybrać biuro rachunkowe (mogą też pomóc z rejestracją)<br>
-        4. Zarejestrować spółkę<br>
-        5. Odpalić timery — 14 dni na CRBR i PCC-3!</p>
-    </div>
 </section>
 
 <footer>
     <p>Research & konsultacja: <strong>Wiki</strong> (Claude Opus) + <strong>Misty</strong> (Gemini) · 26.02.2026</p>
-    <p>Źródła: infor.pl · biznes.gov.pl · fakturomania.pl · mistrzpodatkow.pl · kancelaria-firost.pl</p>
+    <p>Źródła: infor.pl · biznes.gov.pl · fakturomania.pl · mistrzpodatkow.pl · kancelaria-firost.pl · 24wirtualne-biuro.pl · kbg-adwokaci.pl</p>
     <p style="margin-top: 0.5rem;">⚠️ Dokument ma charakter informacyjny, nie stanowi porady prawnej ani podatkowej.<br>Przed podjęciem decyzji skonsultuj się z prawnikiem i/lub doradcą podatkowym.</p>
     <p style="margin-top: 1rem;"><a href="https://numerika.ai">numerika.ai</a></p>
 </footer>
