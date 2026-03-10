@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw — Twoja Osobista Armia AI</title>
+<meta name="description" content="OpenClaw — samodzielnie hostowana bramka AI łącząca komunikatory z agentami AI. 297K+ gwiazdek na GitHub.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0e27;
+  --bg-mid: #0f1438;
+  --bg-card: rgba(15, 20, 56, 0.6);
+  --coral: #ff6b6b;
+  --coral-light: #ff8e8e;
+  --teal: #4ecdc4;
+  --teal-dark: #3ba99e;
+  --purple: #a78bfa;
+  --gold: #fbbf24;
+  --text: #e8eaf6;
+  --text-dim: #9ca3af;
+  --text-bright: #ffffff;
+  --grad-coral: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  --grad-teal: linear-gradient(135deg, #4ecdc4, #44b09e);
+  --grad-purple: linear-gradient(135deg, #a78bfa, #7c3aed);
+  --grad-hero: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 25%, #ff6b6b 50%, #4ecdc4 75%, #a78bfa 100%);
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --glow-coral: 0 0 30px rgba(255, 107, 107, 0.3);
+  --glow-teal: 0 0 30px rgba(78, 205, 196, 0.3);
+}
+
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--coral) var(--bg-deep); }
+body { font-family: var(--font-body); background: var(--bg-deep); color: var(--text); overflow-x: hidden; line-height: 1.7; }
+body::-webkit-scrollbar { width: 8px; }
+body::-webkit-scrollbar-track { background: var(--bg-deep); }
+body::-webkit-scrollbar-thumb { background: var(--coral); border-radius: 4px; }
+
+/* ========== PROGRESS BAR ========== */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 10000;
+  background: var(--grad-hero); background-size: 300% 100%;
+  animation: gradientShift 3s ease infinite;
+  transition: width 0.15s ease-out; width: 0%;
+}
+
+/* ========== NAV ========== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  padding: 0.8rem 2rem;
+  background: rgba(10, 14, 39, 0.85);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border-bottom: 1px solid rgba(255, 107, 107, 0.1);
+  transition: all 0.4s ease;
+  display: flex; align-items: center; justify-content: space-between;
+}
+nav.scrolled { padding: 0.5rem 2rem; background: rgba(10, 14, 39, 0.95); }
+.nav-logo {
+  font-family: var(--font-mono); font-weight: 700; font-size: 1.2rem;
+  background: var(--grad-hero); background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; animation: gradientShift 3s ease infinite;
+}
+.nav-links { display: flex; gap: 1.5rem; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+  font-weight: 500; transition: all 0.3s ease; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0;
+  height: 2px; background: var(--coral); transition: width 0.3s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--coral); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.nav-toggle span { display: block; width: 24px; height: 2px; background: var(--text); transition: all 0.3s; border-radius: 2px; }
+
+/* ========== CANVAS ========== */
+#particles-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+/* ========== SECTION BASICS ========== */
+section {
+  position: relative; z-index: 1;
+  padding: 6rem 2rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.section-bg {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 100vw; height: 100%; z-index: -1; overflow: hidden;
+}
+
+/* ========== REVEAL ANIMATIONS ========== */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+.reveal-scale { opacity: 0; transform: scale(0.85); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* Staggered delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
+
+/* ========== KEYFRAMES ========== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(255, 107, 107, 0.4); }
+}
+@keyframes borderGlow {
+  0% { border-color: rgba(255, 107, 107, 0.3); }
+  33% { border-color: rgba(78, 205, 196, 0.3); }
+  66% { border-color: rgba(167, 139, 250, 0.3); }
+  100% { border-color: rgba(255, 107, 107, 0.3); }
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes typewriter { from { width: 0; } to { width: 100%; } }
+@keyframes blink { 50% { border-color: transparent; } }
+@keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+@keyframes orbitPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.08); filter: brightness(1.3); }
+}
+@keyframes dashFlow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ========== GRADIENT TEXT ========== */
+.gradient-text {
+  background: var(--grad-hero); background-size: 300% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; animation: gradientShift 4s ease infinite;
+}
+.gradient-text-teal {
+  background: var(--grad-teal); background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== SECTION TITLE ========== */
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800;
+  margin-bottom: 0.5rem; letter-spacing: -0.02em;
+}
+.section-subtitle {
+  font-size: 1.1rem; color: var(--text-dim);
+  max-width: 600px; margin-bottom: 3rem;
+}
+
+/* ========== GLASSMORPHISM CARD ========== */
+.glass-card {
+  background: rgba(15, 20, 56, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.glass-card::before {
+  content: ''; position: absolute; inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,107,107,0.15), transparent 50%, rgba(78,205,196,0.15));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none;
+}
+.glass-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 107, 107, 0.2);
+  box-shadow: 0 20px 60px rgba(255, 107, 107, 0.1), 0 0 40px rgba(78, 205, 196, 0.05);
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.9rem 2rem; border-radius: 12px;
+  font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; cursor: pointer; border: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative; overflow: hidden;
+}
+.btn-primary {
+  background: var(--grad-coral); color: white;
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
+}
+.btn-secondary {
+  background: transparent; color: var(--teal);
+  border: 2px solid rgba(78, 205, 196, 0.4);
+}
+.btn-secondary:hover {
+  background: rgba(78, 205, 196, 0.1);
+  border-color: var(--teal);
+  transform: translateY(-3px);
+  box-shadow: var(--glow-teal);
+}
+.btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.btn:hover::after { opacity: 1; }
+
+/* ========== HERO ========== */
+#hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding-top: 5rem;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1.2rem; border-radius: 100px;
+  background: rgba(78, 205, 196, 0.1);
+  border: 1px solid rgba(78, 205, 196, 0.25);
+  font-size: 0.85rem; color: var(--teal);
+  font-family: var(--font-mono); font-weight: 500;
+  margin-bottom: 2rem; animation: floatSlow 4s ease-in-out infinite;
+}
+.hero-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--teal); animation: pulse 2s ease-in-out infinite;
+}
+.hero-logo {
+  font-family: var(--font-mono); font-weight: 900;
+  font-size: clamp(3.5rem, 12vw, 8rem);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+.hero-logo .claw {
+  position: relative;
+  display: inline-block;
+}
+.hero-logo .claw::after {
+  content: '🐾';
+  position: absolute;
+  top: -0.3em;
+  right: -0.6em;
+  font-size: 0.3em;
+  animation: float 3s ease-in-out infinite;
+}
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--text-dim);
+  max-width: 650px;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+.typewriter-wrapper {
+  display: inline-block; position: relative;
+}
+.typewriter {
+  overflow: hidden; white-space: nowrap;
+  border-right: 3px solid var(--coral);
+  animation: typewriter 3s steps(40, end) 0.5s 1 normal both, blink 0.75s step-end infinite 3.5s;
+}
+.hero-stats {
+  display: flex; gap: 2rem; margin-bottom: 3rem;
+  flex-wrap: wrap; justify-content: center;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat-number {
+  font-family: var(--font-mono); font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3rem);
+  display: block;
+}
+.hero-stat-label {
+  font-size: 0.85rem; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.hero-scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: var(--text-dim); font-size: 0.8rem;
+  animation: float 2s ease-in-out infinite;
+}
+.hero-scroll-hint .scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--coral), transparent);
+}
+
+/* ========== MESH BACKGROUNDS ========== */
+.mesh-1 {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(255, 107, 107, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(78, 205, 196, 0.06) 0%, transparent 70%);
+}
+.mesh-2 {
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 30%, rgba(167, 139, 250, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 30% 70%, rgba(255, 107, 107, 0.06) 0%, transparent 70%);
+}
+.mesh-3 {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(78, 205, 196, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(251, 191, 36, 0.04) 0%, transparent 70%);
+}
+
+/* ========== CLIP-PATH DIVIDER ========== */
+.section-divider {
+  position: absolute; bottom: -2px; left: 0; width: 100%; overflow: hidden;
+  z-index: 2;
+}
+.section-divider svg { display: block; width: 100%; height: 60px; }
+
+/* ========== WHAT IS SECTION ========== */
+.what-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3rem; align-items: center;
+}
+.what-diagram {
+  position: relative; padding: 2rem;
+}
+.diagram-center {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: var(--grad-coral);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-weight: 700; font-size: 0.9rem;
+  color: white; margin: 0 auto;
+  box-shadow: 0 0 40px rgba(255, 107, 107, 0.3);
+  position: relative; z-index: 2;
+  animation: orbitPulse 3s ease-in-out infinite;
+}
+.diagram-channels {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 1rem; margin-top: 2rem;
+}
+.diagram-channel {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease;
+  animation: floatSlow 3s ease-in-out infinite;
+}
+.diagram-channel:nth-child(2) { animation-delay: 0.5s; }
+.diagram-channel:nth-child(3) { animation-delay: 1s; }
+.diagram-channel:nth-child(4) { animation-delay: 1.5s; }
+.diagram-channel:nth-child(5) { animation-delay: 2s; }
+.diagram-channel:nth-child(6) { animation-delay: 2.5s; }
+.diagram-channel:hover {
+  transform: translateY(-6px) scale(1.1);
+  border-color: rgba(78, 205, 196, 0.4);
+  background: rgba(78, 205, 196, 0.08);
+  box-shadow: var(--glow-teal);
+}
+.diagram-channel svg { width: 28px; height: 28px; fill: var(--text); }
+.what-features {
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.what-feature {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1rem; border-radius: 12px;
+  transition: all 0.3s ease;
+}
+.what-feature:hover { background: rgba(255, 255, 255, 0.03); }
+.what-feature-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+}
+.what-feature h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
+.what-feature p { font-size: 0.9rem; color: var(--text-dim); }
+
+/* ========== CAPABILITIES ========== */
+.cap-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.cap-card {
+  position: relative; overflow: hidden;
+  padding: 2rem 1.5rem;
+}
+.cap-card .cap-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 1.2rem;
+  transition: all 0.4s ease;
+}
+.cap-card:hover .cap-icon { transform: scale(1.15) rotate(-5deg); }
+.cap-card h3 {
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem;
+}
+.cap-card p {
+  font-size: 0.88rem; color: var(--text-dim); line-height: 1.6;
+}
+.cap-card .cap-hover-detail {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(to top, rgba(255, 107, 107, 0.1), transparent);
+  transform: translateY(100%); transition: transform 0.4s ease;
+  font-size: 0.8rem; color: var(--coral-light);
+  font-family: var(--font-mono);
+}
+.cap-card:hover .cap-hover-detail { transform: translateY(0); }
+
+.icon-coral { background: rgba(255, 107, 107, 0.12); color: var(--coral); }
+.icon-teal { background: rgba(78, 205, 196, 0.12); color: var(--teal); }
+.icon-purple { background: rgba(167, 139, 250, 0.12); color: var(--purple); }
+.icon-gold { background: rgba(251, 191, 36, 0.12); color: var(--gold); }
+
+/* ========== SHOWCASE ========== */
+.showcase-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem; margin-bottom: 3rem;
+}
+.showcase-card {
+  position: relative; overflow: hidden;
+  border-radius: 20px; cursor: pointer;
+}
+.showcase-card .showcase-img {
+  width: 100%; height: 200px;
+  background: linear-gradient(135deg, var(--bg-mid), var(--bg-deep));
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.showcase-card .showcase-img .mock-ui {
+  width: 85%; height: 80%; border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem;
+  font-size: 0.7rem; font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+.mock-line {
+  height: 6px; border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.mock-line.short { width: 40%; }
+.mock-line.med { width: 70%; }
+.mock-line.long { width: 90%; }
+.mock-line.accent { background: rgba(255, 107, 107, 0.2); }
+.mock-line.teal-accent { background: rgba(78, 205, 196, 0.2); }
+.showcase-card .showcase-info { padding: 1.2rem 1.5rem; }
+.showcase-card .showcase-tag {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--teal); text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 0.5rem;
+}
+.showcase-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+.showcase-card p { font-size: 0.85rem; color: var(--text-dim); }
+
+.video-embed {
+  position: relative; width: 100%; max-width: 800px;
+  margin: 0 auto; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 107, 107, 0.15);
+  animation: glow 4s ease-in-out infinite;
+}
+.video-embed iframe {
+  width: 100%; aspect-ratio: 16/9;
+  border: none; display: block;
+}
+
+/* ========== AGENTS ========== */
+.agents-story {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3rem; margin-bottom: 3rem; align-items: center;
+}
+.infra-diagram {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+}
+.infra-node {
+  padding: 1rem; text-align: center; border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s ease;
+}
+.infra-node:hover {
+  border-color: rgba(78, 205, 196, 0.3);
+  box-shadow: var(--glow-teal);
+}
+.infra-node .node-name {
+  font-family: var(--font-mono); font-weight: 600;
+  font-size: 0.9rem; color: var(--teal);
+}
+.infra-node .node-role {
+  font-size: 0.75rem; color: var(--text-dim);
+  margin-top: 0.3rem;
+}
+
+.agent-flow {
+  position: relative; padding: 2rem 0;
+}
+.agent-flow-svg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+.agent-cards {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem; position: relative; z-index: 1;
+}
+.agent-card {
+  padding: 1.5rem; border-radius: 16px;
+  text-align: center;
+  background: rgba(15, 20, 56, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.4s ease;
+  position: relative;
+}
+.agent-card::after {
+  content: ''; position: absolute; inset: -1px;
+  border-radius: 16px; padding: 1px; z-index: -1;
+  background: linear-gradient(135deg, var(--agent-color, rgba(255,107,107,0.3)), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.agent-card:hover::after { opacity: 1; }
+.agent-card:hover { transform: translateY(-6px); }
+.agent-emoji { font-size: 2.2rem; margin-bottom: 0.5rem; display: block; }
+.agent-name {
+  font-family: var(--font-mono); font-weight: 700;
+  font-size: 1rem; margin-bottom: 0.3rem;
+}
+.agent-role { font-size: 0.82rem; color: var(--text-dim); }
+
+/* Agent connection SVG */
+.agent-connections {
+  position: relative; margin: 2rem auto;
+  max-width: 600px; height: 120px;
+}
+.agent-connections svg { width: 100%; height: 100%; }
+.agent-connections .flow-line {
+  stroke: var(--coral); stroke-width: 2;
+  stroke-dasharray: 8 4;
+  animation: dashFlow 1s linear infinite;
+  fill: none;
+}
+.agent-connections .flow-dot {
+  fill: var(--teal); r: 4;
+}
+
+/* ========== TIMELINE ========== */
+.timeline {
+  position: relative; padding: 2rem 0;
+}
+.timeline::before {
+  content: ''; position: absolute;
+  left: 30px; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(to bottom, var(--coral), var(--teal), var(--purple));
+}
+.timeline-item {
+  display: flex; gap: 2rem; margin-bottom: 2rem;
+  position: relative; padding-left: 70px;
+}
+.timeline-dot {
+  position: absolute; left: 22px; top: 0.3rem;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 3px solid var(--coral);
+  background: var(--bg-deep);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.timeline-item:hover .timeline-dot {
+  background: var(--coral);
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  transform: scale(1.3);
+}
+.timeline-item:nth-child(even) .timeline-dot { border-color: var(--teal); }
+.timeline-item:nth-child(even):hover .timeline-dot {
+  background: var(--teal);
+  box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+}
+.timeline-time {
+  font-family: var(--font-mono); font-size: 0.85rem;
+  color: var(--coral); font-weight: 600;
+  min-width: 60px;
+  position: absolute; left: 50px; top: 0.2rem;
+}
+.timeline-content {
+  padding-left: 1rem; flex: 1;
+}
+.timeline-content h3 {
+  font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem;
+}
+.timeline-content p { font-size: 0.88rem; color: var(--text-dim); }
+
+/* ========== WHY SECTION ========== */
+.why-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+.why-card {
+  display: flex; gap: 1.2rem; align-items: flex-start;
+  padding: 2rem;
+}
+.why-icon {
+  width: 60px; height: 60px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+  transition: all 0.4s ease;
+}
+.why-card:hover .why-icon { transform: scale(1.15) rotate(-8deg); }
+.why-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+.why-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+
+/* ========== CTA ========== */
+#cta {
+  text-align: center;
+  padding-bottom: 6rem;
+}
+.cta-box {
+  padding: 4rem 3rem; border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.08), rgba(78, 205, 196, 0.05));
+  border: 1px solid rgba(255, 107, 107, 0.15);
+  position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 107, 107, 0.08), transparent 60%);
+}
+.cta-links {
+  display: flex; gap: 1rem; justify-content: center;
+  flex-wrap: wrap; margin-top: 2rem;
+}
+
+/* ========== FOOTER ========== */
+footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.8rem; color: var(--text-dim);
+}
+footer a { color: var(--teal); text-decoration: none; }
+footer a:hover { color: var(--coral); }
+
+/* ========== MOBILE ========== */
+@media (max-width: 768px) {
+  section { padding: 4rem 1.2rem; }
+  .nav-links { display: none; position: fixed; top: 60px; left: 0; right: 0; background: rgba(10,14,39,0.97); flex-direction: column; align-items: center; padding: 2rem; gap: 1.5rem; border-bottom: 1px solid rgba(255,107,107,0.1); }
+  .nav-links.open { display: flex; }
+  .nav-toggle { display: flex; }
+  .what-grid, .agents-story { grid-template-columns: 1fr; }
+  .cap-grid { grid-template-columns: 1fr; }
+  .showcase-grid { grid-template-columns: 1fr; }
+  .agent-cards { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 1.5rem; }
+  .hero-logo { font-size: clamp(2.5rem, 10vw, 5rem); }
+  .infra-diagram { grid-template-columns: 1fr; }
+  .timeline-item { padding-left: 60px; }
+  .timeline-time { font-size: 0.75rem; }
+  .cta-box { padding: 2.5rem 1.5rem; }
+}
+@media (max-width: 480px) {
+  .cap-grid { grid-template-columns: 1fr; }
+  .hero-buttons { flex-direction: column; align-items: center; }
+  .cta-links { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Particle Canvas -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- Navigation -->
+<nav id="main-nav">
+  <div class="nav-logo">OpenClaw</div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#hero">Start</a></li>
+    <li><a href="#what">Co to jest?</a></li>
+    <li><a href="#capabilities">Możliwości</a></li>
+    <li><a href="#showcase">Showcase</a></li>
+    <li><a href="#agents">Jak używamy</a></li>
+    <li><a href="#timeline-section">Typowy dzień</a></li>
+    <li><a href="#why">Dlaczego warto</a></li>
+    <li><a href="#cta">Dołącz</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section id="hero">
+  <div class="section-bg mesh-1"></div>
+
+  <div class="hero-badge reveal">
+    <span class="dot"></span>
+    Open Source • MIT License • Wspierane przez OpenAI &amp; Vercel
+  </div>
+
+  <h1 class="hero-logo reveal delay-1">
+    <span class="gradient-text"><span class="claw">Open</span>Claw</span>
+  </h1>
+
+  <div class="hero-tagline reveal delay-2">
+    <div class="typewriter-wrapper">
+      <span class="typewriter">Twoja Osobista Armia AI, Dostępna z Telefonu 🚀</span>
+    </div>
+  </div>
+
+  <div class="hero-stats reveal delay-3">
+    <div class="hero-stat">
+      <span class="hero-stat-number gradient-text" data-target="297" data-suffix="K+">0</span>
+      <span class="hero-stat-label">GitHub Stars</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-number gradient-text-teal" data-target="56" data-suffix="K+">0</span>
+      <span class="hero-stat-label">Forks</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-number" style="color: var(--purple)" data-target="25" data-suffix="+">0</span>
+      <span class="hero-stat-label">Kanałów</span>
+    </div>
+  </div>
+
+  <div class="hero-buttons reveal delay-4">
+    <a href="https://github.com/nicepkg/openclaw" class="btn btn-primary" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+    <a href="https://docs.openclaw.ai" class="btn btn-secondary" target="_blank">
+      📖 Dokumentacja
+    </a>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <span>Przewiń w dół</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ==================== CO TO JEST ==================== -->
+<section id="what">
+  <div class="section-bg mesh-2"></div>
+
+  <div class="reveal">
+    <h2 class="section-title"><span class="gradient-text">Co to jest OpenClaw?</span></h2>
+    <p class="section-subtitle">Samodzielnie hostowana bramka AI, która łączy Twoje komunikatory z agentami sztucznej inteligencji</p>
+  </div>
+
+  <div class="what-grid">
+    <div class="what-diagram reveal-left">
+      <div class="diagram-center">OpenClaw<br>Server</div>
+      <div class="diagram-channels">
+        <!-- WhatsApp -->
+        <div class="diagram-channel" title="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <!-- Telegram -->
+        <div class="diagram-channel" title="Telegram">
+          <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <!-- Discord -->
+        <div class="diagram-channel" title="Discord">
+          <svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1569 2.4189z"/></svg>
+        </div>
+        <!-- Signal -->
+        <div class="diagram-channel" title="Signal">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 3.6c4.636 0 8.4 3.764 8.4 8.4 0 4.636-3.764 8.4-8.4 8.4-1.47 0-2.853-.379-4.057-1.044l-4.143 1.08 1.104-4.038A8.346 8.346 0 013.6 12c0-4.636 3.764-8.4 8.4-8.4zm-2.4 4.8v1.2h4.8V8.4H9.6zm0 2.4v1.2h4.8v-1.2H9.6zm0 2.4v1.2h3.6v-1.2H9.6z"/></svg>
+        </div>
+        <!-- Slack -->
+        <div class="diagram-channel" title="Slack">
+          <svg viewBox="0 0 24 24"><path d="M5.042 15.165a2.528 2.528 0 01-2.52 2.523A2.528 2.528 0 010 15.165a2.527 2.527 0 012.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 012.521-2.52 2.527 2.527 0 012.521 2.52v6.313A2.528 2.528 0 018.834 24a2.528 2.528 0 01-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 01-2.521-2.52A2.528 2.528 0 018.834 0a2.528 2.528 0 012.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 012.521 2.521 2.528 2.528 0 01-2.521 2.521H2.522A2.528 2.528 0 010 8.834a2.528 2.528 0 012.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 012.522-2.521A2.528 2.528 0 0124 8.834a2.528 2.528 0 01-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 01-2.523 2.521 2.527 2.527 0 01-2.52-2.521V2.522A2.527 2.527 0 0115.165 0a2.528 2.528 0 012.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 012.523 2.522A2.528 2.528 0 0115.165 24a2.527 2.527 0 01-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 01-2.52-2.523 2.526 2.526 0 012.52-2.52h6.313A2.527 2.527 0 0124 15.165a2.528 2.528 0 01-2.522 2.523h-6.313z"/></svg>
+        </div>
+        <!-- iMessage / SMS -->
+        <div class="diagram-channel" title="iMessage / SMS">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12zM7 9h2v2H7V9zm4 0h2v2h-2V9zm4 0h2v2h-2V9z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="what-features">
+      <div class="what-feature reveal-right delay-1">
+        <div class="what-feature-icon icon-coral">🖥️</div>
+        <div>
+          <h3>Jeden Serwer, Wszystkie Kanały</h3>
+          <p>Podłącz WhatsApp, Telegram, Discord, Signal, Slack i ponad 20 innych komunikatorów do jednego serwera AI</p>
+        </div>
+      </div>
+      <div class="what-feature reveal-right delay-2">
+        <div class="what-feature-icon icon-teal">🔒</div>
+        <div>
+          <h3>Twoje Dane Zostają u Ciebie</h3>
+          <p>Self-hosted oznacza pełną kontrolę. Żadne dane nie opuszczają Twojego serwera bez Twojej zgody</p>
+        </div>
+      </div>
+      <div class="what-feature reveal-right delay-3">
+        <div class="what-feature-icon icon-purple">🤖</div>
+        <div>
+          <h3>Wielu Agentów AI</h3>
+          <p>Każdy agent może mieć inną osobowość, umiejętności i zadania — jak zespół specjalistów AI</p>
+        </div>
+      </div>
+      <div class="what-feature reveal-right delay-4">
+        <div class="what-feature-icon icon-gold">📱</div>
+        <div>
+          <h3>Dostępne z Telefonu</h3>
+          <p>Nie potrzebujesz laptopa. Zarządzaj swoimi agentami AI prosto z WhatsApp czy Telegram</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MOŻLIWOŚCI ==================== -->
+<section id="capabilities">
+  <div class="section-bg mesh-3"></div>
+
+  <div class="reveal">
+    <h2 class="section-title"><span class="gradient-text">Możliwości</span></h2>
+    <p class="section-subtitle">Pełna paleta narzędzi do budowania infrastruktury AI</p>
+  </div>
+
+  <div class="cap-grid">
+    <div class="glass-card cap-card reveal delay-1">
+      <div class="cap-icon icon-teal">💬</div>
+      <h3>Multi-Channel</h3>
+      <p>Podłącz ponad 25 komunikatorów: WhatsApp, Telegram, Discord, Signal, Slack, Email i więcej</p>
+      <div class="cap-hover-detail">→ webhook, polling, bridge</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-2">
+      <div class="cap-icon icon-coral">🤖</div>
+      <h3>Multi-Agent</h3>
+      <p>Twórz wielu agentów z różnymi osobowościami, promptami i umiejętnościami</p>
+      <div class="cap-hover-detail">→ routing, handoff, chains</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-3">
+      <div class="cap-icon icon-purple">⏰</div>
+      <h3>Automatyzacja / Cron</h3>
+      <p>Zaplanuj zadania, które wykonują się automatycznie — raporty, monitoringi, powiadomienia</p>
+      <div class="cap-hover-detail">→ cron expressions, triggers</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-4">
+      <div class="cap-icon icon-gold">🧩</div>
+      <h3>System Umiejętności</h3>
+      <p>Rozszerzalny system skills — dodaj nowe funkcje do agenta bez dotykania core'u</p>
+      <div class="cap-hover-detail">→ plugins, marketplace</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-5">
+      <div class="cap-icon icon-teal">💻</div>
+      <h3>ACP / Coding Agents</h3>
+      <p>Agenci mogą pisać kod, tworzyć PR-y, zarządzać repozytoriami — pełna automatyzacja DevOps</p>
+      <div class="cap-hover-detail">→ Claude Code, Git, CI/CD</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-6">
+      <div class="cap-icon icon-coral">🌐</div>
+      <h3>Kontrola Przeglądarki</h3>
+      <p>Agenci mogą przeglądać strony, wypełniać formularze, robić zakupy — jak wirtualny asystent</p>
+      <div class="cap-hover-detail">→ Puppeteer, browser nodes</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-7">
+      <div class="cap-icon icon-purple">📱</div>
+      <h3>Mobile Nodes</h3>
+      <p>Rozszerzaj możliwości agentów przez telefon — iOS i Android jako węzły wykonawcze</p>
+      <div class="cap-hover-detail">→ iOS app, Android app</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-8">
+      <div class="cap-icon icon-gold">🧠</div>
+      <h3>Pamięć &amp; Kontekst</h3>
+      <p>Agenci pamiętają kontekst rozmów, preferencje użytkownika i historię interakcji</p>
+      <div class="cap-hover-detail">→ vector DB, embeddings</div>
+    </div>
+    <div class="glass-card cap-card reveal delay-5">
+      <div class="cap-icon icon-teal">🎙️</div>
+      <h3>Głos / TTS</h3>
+      <p>Wysyłaj i odbieraj wiadomości głosowe. Agent zamienia tekst na mowę i odwrotnie</p>
+      <div class="cap-hover-detail">→ Whisper, ElevenLabs</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SHOWCASE ==================== -->
+<section id="showcase">
+  <div class="section-bg mesh-1"></div>
+
+  <div class="reveal">
+    <h2 class="section-title"><span class="gradient-text">Showcase Społeczności</span></h2>
+    <p class="section-subtitle">Prawdziwe projekty zbudowane przez społeczność OpenClaw</p>
+  </div>
+
+  <div class="showcase-grid">
+    <div class="glass-card showcase-card reveal delay-1">
+      <div class="showcase-img">
+        <div class="mock-ui">
+          <div style="color: var(--teal); font-size: 0.65rem; margin-bottom: 0.3rem;">PR #142 Review</div>
+          <div class="mock-line long accent"></div>
+          <div class="mock-line med"></div>
+          <div class="mock-line short teal-accent"></div>
+          <div class="mock-line long"></div>
+          <div style="color: var(--coral); font-size: 0.6rem; margin-top: auto;">✅ Approved → Telegram</div>
+        </div>
+      </div>
+      <div class="showcase-info">
+        <div class="showcase-tag">DevOps</div>
+        <h3>PR Review → Telegram</h3>
+        <p>Automatyczne review kodu z feedbackiem wysyłanym na Telegram</p>
+      </div>
+    </div>
+
+    <div class="glass-card showcase-card reveal delay-2">
+      <div class="showcase-img">
+        <div class="mock-ui">
+          <div style="color: var(--purple); font-size: 0.65rem; margin-bottom: 0.3rem;">🍷 Wine Cellar</div>
+          <div class="mock-line med accent"></div>
+          <div class="mock-line long"></div>
+          <div class="mock-line short"></div>
+          <div style="color: var(--gold); font-size: 0.6rem; margin-top: auto;">962 butelki w bazie</div>
+        </div>
+      </div>
+      <div class="showcase-info">
+        <div class="showcase-tag">Skill</div>
+        <h3>Wine Cellar Skill</h3>
+        <p>Zarządzanie piwnicą z winami — 962 butelki skatalogowane przez AI</p>
+      </div>
+    </div>
+
+    <div class="glass-card showcase-card reveal delay-3">
+      <div class="showcase-img">
+        <div class="mock-ui">
+          <div style="color: var(--coral); font-size: 0.65rem; margin-bottom: 0.3rem;">🛒 Tesco Autopilot</div>
+          <div class="mock-line long teal-accent"></div>
+          <div class="mock-line med"></div>
+          <div class="mock-line long accent"></div>
+          <div style="color: var(--teal); font-size: 0.6rem; margin-top: auto;">Zamówienie złożone ✓</div>
+        </div>
+      </div>
+      <div class="showcase-info">
+        <div class="showcase-tag">Browser Automation</div>
+        <h3>Tesco Shop Autopilot</h3>
+        <p>Agent samodzielnie robi zakupy online — przeglądarka sterowana AI</p>
+      </div>
+    </div>
+
+    <div class="glass-card showcase-card reveal delay-4">
+      <div class="showcase-img">
+        <div class="mock-ui">
+          <div style="color: var(--teal); font-size: 0.65rem; margin-bottom: 0.3rem;">📸 SNAG Tool</div>
+          <div class="mock-line long"></div>
+          <div class="mock-line med teal-accent"></div>
+          <div class="mock-line short accent"></div>
+          <div style="color: var(--purple); font-size: 0.6rem; margin-top: auto;">Screenshot → Markdown</div>
+        </div>
+      </div>
+      <div class="showcase-info">
+        <div class="showcase-tag">Narzędzie</div>
+        <h3>SNAG Screenshot-to-Markdown</h3>
+        <p>Konwersja zrzutów ekranu na sformatowany Markdown automatycznie</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-embed reveal-scale">
+    <iframe
+      src="https://www.youtube.com/embed/SaWSPZoPX34"
+      title="OpenClaw Setup Walkthrough"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      loading="lazy"
+    ></iframe>
+  </div>
+</section>
+
+<!-- ==================== JAK MY TO WYKORZYSTUJEMY ==================== -->
+<section id="agents">
+  <div class="section-bg mesh-2"></div>
+
+  <div class="reveal">
+    <h2 class="section-title"><span class="gradient-text">Jak My To Wykorzystujemy</span></h2>
+    <p class="section-subtitle">Historia Numerika.ai — nasza infrastruktura AI w praktyce</p>
+  </div>
+
+  <div class="agents-story">
+    <div class="reveal-left">
+      <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-bright);">Nasza Infrastruktura</h3>
+      <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.95rem;">Trzy serwery, czterech agentów AI, i bezgraniczne możliwości. Wszystko zarządzane z telefonu.</p>
+      <div class="infra-diagram">
+        <div class="infra-node">
+          <div style="font-size: 1.5rem; margin-bottom: 0.3rem;">🖥️</div>
+          <div class="node-name">Tank</div>
+          <div class="node-role">Serwer główny</div>
+        </div>
+        <div class="infra-node">
+          <div style="font-size: 1.5rem; margin-bottom: 0.3rem;">⚡</div>
+          <div class="node-name">Spark</div>
+          <div class="node-role">Zadania GPU</div>
+        </div>
+        <div class="infra-node">
+          <div style="font-size: 1.5rem; margin-bottom: 0.3rem;">🚂</div>
+          <div class="node-name">Loco39</div>
+          <div class="node-role">Edge computing</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal-right">
+      <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-bright);">Kanały Komunikacji</h3>
+      <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.95rem;">Nasi agenci dostępni są przez wszystkie nasze kanały komunikacji:</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+        <span style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 100px; background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.2); font-size: 0.85rem; color: #25d366;">💬 WhatsApp</span>
+        <span style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 100px; background: rgba(114,137,218,0.1); border: 1px solid rgba(114,137,218,0.2); font-size: 0.85rem; color: #7289da;">🎮 Discord</span>
+        <span style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 100px; background: rgba(78,205,196,0.1); border: 1px solid rgba(78,205,196,0.2); font-size: 0.85rem; color: var(--teal);">💼 Mattermost</span>
+        <span style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 100px; background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.2); font-size: 0.85rem; color: var(--coral);">📧 Email</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agent Connection Diagram -->
+  <div class="agent-connections reveal-scale">
+    <svg viewBox="0 0 600 100" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#ff6b6b"/>
+          <stop offset="50%" style="stop-color:#4ecdc4"/>
+          <stop offset="100%" style="stop-color:#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <!-- Connection lines -->
+      <path d="M75 50 L225 50" class="flow-line" stroke="url(#flow-grad)"/>
+      <path d="M225 50 L375 30" class="flow-line" style="animation-delay: 0.3s"/>
+      <path d="M225 50 L375 70" class="flow-line" style="animation-delay: 0.6s"/>
+      <path d="M375 30 L525 50" class="flow-line" style="animation-delay: 0.9s"/>
+      <path d="M375 70 L525 50" class="flow-line" style="animation-delay: 1.2s"/>
+      <!-- Node dots -->
+      <circle cx="75" cy="50" r="8" fill="#ff6b6b" opacity="0.8"><animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="225" cy="50" r="8" fill="#4ecdc4" opacity="0.8"><animate attributeName="r" values="6;10;6" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle>
+      <circle cx="375" cy="30" r="6" fill="#a78bfa" opacity="0.8"><animate attributeName="r" values="5;8;5" dur="2s" begin="1s" repeatCount="indefinite"/></circle>
+      <circle cx="375" cy="70" r="6" fill="#fbbf24" opacity="0.8"><animate attributeName="r" values="5;8;5" dur="2s" begin="1.5s" repeatCount="indefinite"/></circle>
+      <circle cx="525" cy="50" r="8" fill="#ff6b6b" opacity="0.8"><animate attributeName="r" values="6;10;6" dur="2s" begin="2s" repeatCount="indefinite"/></circle>
+      <!-- Labels -->
+      <text x="75" y="80" fill="#e8eaf6" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Wiki</text>
+      <text x="225" y="80" fill="#e8eaf6" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Hermes</text>
+      <text x="375" y="15" fill="#e8eaf6" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Misty</text>
+      <text x="375" y="98" fill="#e8eaf6" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Jarvis</text>
+      <text x="525" y="80" fill="#e8eaf6" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Rezultat</text>
+    </svg>
+  </div>
+
+  <!-- Agent Cards -->
+  <div class="agent-cards" style="margin-top: 2rem;">
+    <div class="agent-card reveal delay-1" style="--agent-color: rgba(255,107,107,0.4);">
+      <span class="agent-emoji">📚</span>
+      <div class="agent-name" style="color: var(--coral);">Wiki</div>
+      <div class="agent-role">Orkiestrator — zarządza pozostałymi agentami, deleguje zadania, prowadzi rozmowy</div>
+    </div>
+    <div class="agent-card reveal delay-2" style="--agent-color: rgba(78,205,196,0.4);">
+      <span class="agent-emoji">📨</span>
+      <div class="agent-name" style="color: var(--teal);">Hermes</div>
+      <div class="agent-role">Agent sprzedażowy — prowadzi leady, odpowiada klientom, zarządza CRM</div>
+    </div>
+    <div class="agent-card reveal delay-3" style="--agent-color: rgba(167,139,250,0.4);">
+      <span class="agent-emoji">🔍</span>
+      <div class="agent-name" style="color: var(--purple);">Misty</div>
+      <div class="agent-role">Research — analizuje rynek, zbiera dane, monitoruje trendy</div>
+    </div>
+    <div class="agent-card reveal delay-4" style="--agent-color: rgba(251,191,36,0.4);">
+      <span class="agent-emoji">⚙️</span>
+      <div class="agent-name" style="color: var(--gold);">Jarvis</div>
+      <div class="agent-role">DevOps — deploy, monitoring, CI/CD, zarządzanie infrastrukturą</div>
+    </div>
+  </div>
+
+  <!-- Real examples -->
+  <div style="margin-top: 3rem;">
+    <h3 class="reveal" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-bright);">Prawdziwe Przykłady</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+      <div class="glass-card reveal delay-1" style="padding: 1.2rem;">
+        <div style="font-size: 0.75rem; color: var(--coral); font-family: var(--font-mono); margin-bottom: 0.5rem;">🎙️ Voice → Deploy</div>
+        <p style="font-size: 0.88rem; color: var(--text-dim);">Aplikacja <strong style="color: var(--text);">Higienistki</strong> — zbudowana komendą głosową przez WhatsApp → Claude Code → wdrożona na produkcji</p>
+      </div>
+      <div class="glass-card reveal delay-2" style="padding: 1.2rem;">
+        <div style="font-size: 0.75rem; color: var(--teal); font-family: var(--font-mono); margin-bottom: 0.5rem;">📊 Lead Capture</div>
+        <p style="font-size: 0.88rem; color: var(--text-dim);">System przechwytywania leadów z Apps Script + Google Sheets — automatyczna kwalifikacja i follow-up</p>
+      </div>
+      <div class="glass-card reveal delay-3" style="padding: 1.2rem;">
+        <div style="font-size: 0.75rem; color: var(--purple); font-family: var(--font-mono); margin-bottom: 0.5rem;">📻 Radio ŚS</div>
+        <p style="font-size: 0.88rem; color: var(--text-dim);">Radio Świętego Satoshiego — wiadomości głosowe przetwarzane przez AI i publikowane jako podcast</p>
+      </div>
+      <div class="glass-card reveal delay-4" style="padding: 1.2rem;">
+        <div style="font-size: 0.75rem; color: var(--gold); font-family: var(--font-mono); margin-bottom: 0.5rem;">🔄 Cron Monitoring</div>
+        <p style="font-size: 0.88rem; color: var(--text-dim);">Automatyczny monitoring infrastruktury z alertami na WhatsApp i Discord co 15 minut</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TYPOWY DZIEŃ ==================== -->
+<section id="timeline-section">
+  <div class="section-bg mesh-3"></div>
+
+  <div class="reveal">
+    <h2 class="section-title"><span class="gradient-text">Typowy Dzień z OpenClaw</span></h2>
+    <p class="section-subtitle">Jak wygląda praca z AI na co dzień w Numerika.ai</p>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item reveal delay-1">
+      <div class="timeline-dot"></div>
+      <div class="timeline-time" style="color: var(--coral);">07:00</div>
+      <div class="timeline-content" style="margin-left: 3rem;">
+        <h3>☀️ Poranek — przegląd raportów</h3>
+        <p>Jarvis wysyła automatyczny raport z monitoringu nocnego na WhatsApp. Wiki podsumowuje zadania na dzień.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal delay-2">
+      <div class="timeline-dot"></div>
+      <div class="timeline-time" style="color: var(--teal);">09:00</div>
+      <div class="timeline-content" style="margin-left: 3rem;">
+        <h3>💼 Praca — zarządzanie z telefonu</h3>
+        <p>Wiadomość głosowa na WhatsApp: "Wiki, zrób mi landing page dla nowego klienta." Agent deleguje do Claude Code.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal delay-3">
+      <div class="timeline-dot"></div>
+      <div class="timeline-time" style="color: var(--purple);">11:30</div>
+      <div class="timeline-content" style="margin-left: 3rem;">
+        <h3>📨 Leady — automatyczna obsługa</h3>
+        <p>Hermes wykrywa nowy lead z formularza, kwalifikuje go i wysyła spersonalizowaną odpowiedź. Powiadomienie na Discord.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal delay-4">
+      <div class="timeline-dot"></div>
+      <div class="timeline-time" style="color: var(--gold);">14:00</div>
+      <div class="timeline-content" style="margin-left: 3rem;">
+        <h3>🔍 Research — zbieranie danych</h3>
+        <p>Misty analizuje rynek na żądanie. Wyniki w formie raportu Markdown wysyłane na Mattermost.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal delay-5">
+      <div class="timeline-dot"></div>
+      <div class="timeline-time" style="color: var(--coral);">16:30</div>
+      <div class="timeline-content" style="margin-left: 3rem;">
+        <h3>🚀 Deploy — komenda głosowa</h3>
+        <p>"Jarvis, wdróż nową wersję Higienistki." CI/CD pipeline uruchomiony, GitHub Pages zaktualizowane.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal delay-6">
+      <div class="timeline-dot"></div>
+      <div class="timeline-time" style="color: var(--teal);">20:00</div>
+      <div class="timeline-content" style="margin-left: 3rem;">
+        <h3>📻 Wieczór — Radio ŚS</h3>
+        <p>Notatki głosowe przetwarzane przez AI → transkrypcja → podcast. Wszystko automatycznie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== DLACZEGO WARTO ==================== -->
+<section id="why">
+  <div class="section-bg mesh-1"></div>
+
+  <div class="reveal">
+    <h2 class="section-title"><span class="gradient-text">Dlaczego Warto?</span></h2>
+    <p class="section-subtitle">Korzyści biznesowe, które zmieniają zasady gry</p>
+  </div>
+
+  <div class="why-grid">
+    <div class="glass-card why-card reveal delay-1">
+      <div class="why-icon icon-coral">🔐</div>
+      <div>
+        <h3>AI na Twoim Serwerze</h3>
+        <p>Pełna prywatność i kontrola. Dane firmowe nigdy nie opuszczają Twojej infrastruktury. RODO? Załatwione.</p>
+      </div>
+    </div>
+    <div class="glass-card why-card reveal delay-2">
+      <div class="why-icon icon-teal">📱</div>
+      <div>
+        <h3>Dostępne z Telefonu</h3>
+        <p>Nie potrzebujesz laptopa ani biura. Zarządzaj firmą przez WhatsApp na spacerze z psem.</p>
+      </div>
+    </div>
+    <div class="glass-card why-card reveal delay-3">
+      <div class="why-icon icon-purple">👥</div>
+      <div>
+        <h3>Zespół Specjalistów AI</h3>
+        <p>Multi-agent = zespół, który nie śpi, nie bierze urlopu i jest dostępny 24/7.</p>
+      </div>
+    </div>
+    <div class="glass-card why-card reveal delay-4">
+      <div class="why-icon icon-gold">⚡</div>
+      <div>
+        <h3>Mniej Pracy Ręcznej</h3>
+        <p>Automatyzacja powtarzalnych zadań. Skup się na strategii, AI zajmie się resztą.</p>
+      </div>
+    </div>
+    <div class="glass-card why-card reveal delay-5">
+      <div class="why-icon icon-teal">💰</div>
+      <div>
+        <h3>Koszt? Tylko API</h3>
+        <p>Gateway jest darmowy (MIT License). Płacisz tylko za modele AI, które używasz. Pełna kontrola kosztów.</p>
+      </div>
+    </div>
+    <div class="glass-card why-card reveal delay-6">
+      <div class="why-icon icon-coral">📈</div>
+      <div>
+        <h3>Skalowalne</h3>
+        <p>Od jednego agenta do całego ekosystemu. Rośnij w swoim tempie, dodawaj agentów w miarę potrzeb.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section id="cta">
+  <div class="section-bg mesh-2"></div>
+
+  <div class="cta-box reveal-scale">
+    <h2 class="section-title" style="margin-bottom: 1rem;">
+      <span class="gradient-text">Dołącz do Rewolucji AI</span>
+    </h2>
+    <p style="font-size: 1.1rem; color: var(--text-dim); max-width: 500px; margin: 0 auto 0.5rem;">
+      297,000+ deweloperów już korzysta z OpenClaw. Czas na Twój ruch.
+    </p>
+    <p style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--teal); margin-bottom: 1rem;">
+      npm install openclaw &amp;&amp; openclaw start
+    </p>
+    <div class="cta-links">
+      <a href="https://docs.openclaw.ai" class="btn btn-primary" target="_blank">
+        📖 Dokumentacja
+      </a>
+      <a href="https://github.com/nicepkg/openclaw" class="btn btn-secondary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://discord.gg/openclaw" class="btn btn-secondary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.74 19.74 0 003.677 4.37a.07.07 0 00-.032.028C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.1 13.1 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 01.078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.099.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.076.076 0 00-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 00.084.028 19.84 19.84 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.332-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.086-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.332-.946 2.418-2.157 2.418z"/></svg>
+        Discord
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>OpenClaw — Open Source AI Gateway • MIT License • Zbudowane z ❤️ przez społeczność</p>
+  <p style="margin-top: 0.5rem;">Strona stworzona przez <a href="https://numerika.ai">Numerika.ai</a></p>
+</footer>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+(function() {
+  'use strict';
+
+  // ===== PARTICLE CANVAS =====
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let mouse = { x: null, y: null };
+  let animFrame;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.4;
+      this.speedY = (Math.random() - 0.5) * 0.4;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.color = Math.random() > 0.6 ? '255,107,107' : Math.random() > 0.5 ? '78,205,196' : '167,139,250';
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      // Mouse interaction
+      if (mouse.x !== null) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          this.x -= dx * 0.01;
+          this.y -= dy * 0.01;
+        }
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color},${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  // Adjust particle count based on screen size
+  const particleCount = Math.min(Math.floor((window.innerWidth * window.innerHeight) / 12000), 120);
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(255,107,107,${0.08 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    animFrame = requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  document.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+  // ===== SCROLL PROGRESS BAR =====
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    progressBar.style.width = progress + '%';
+  }
+
+  // ===== NAV SCROLL BEHAVIOR =====
+  const nav = document.getElementById('main-nav');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = document.querySelectorAll('section[id]');
+
+  function updateNav() {
+    if (window.scrollY > 80) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+    // Active section highlight
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 150;
+      if (window.scrollY >= top) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  }
+
+  // ===== MOBILE NAV TOGGLE =====
+  const navToggle = document.getElementById('nav-toggle');
+  const navLinksEl = document.getElementById('nav-links');
+  navToggle.addEventListener('click', () => {
+    navLinksEl.classList.toggle('open');
+    const spans = navToggle.querySelectorAll('span');
+    if (navLinksEl.classList.contains('open')) {
+      spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    } else {
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    }
+  });
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinksEl.classList.remove('open');
+      const spans = navToggle.querySelectorAll('span');
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    });
+  });
+
+  // ===== SCROLL EVENT (throttled) =====
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateNav();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // ===== INTERSECTION OBSERVER FOR REVEALS =====
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  // ===== ANIMATED NUMBER COUNTERS =====
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-target'));
+        const suffix = el.getAttribute('data-suffix') || '';
+        let current = 0;
+        const increment = target / 60;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = Math.floor(current) + suffix;
+        }, 25);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('[data-target]').forEach(el => {
+    counterObserver.observe(el);
+  });
+
+  // ===== BUTTON GLOW FOLLOW =====
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const rect = btn.getBoundingClientRect();
+      btn.style.setProperty('--x', ((e.clientX - rect.left) / rect.width * 100) + '%');
+      btn.style.setProperty('--y', ((e.clientY - rect.top) / rect.height * 100) + '%');
+    });
+  });
+
+  // ===== PARALLAX ON FLOATING ELEMENTS =====
+  let scrollY = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+  // Lightweight parallax for background meshes
+  function parallaxTick() {
+    document.querySelectorAll('.section-bg').forEach(bg => {
+      const rect = bg.parentElement.getBoundingClientRect();
+      const offset = rect.top * 0.05;
+      bg.style.transform = `translateX(-50%) translateY(${offset}px)`;
+    });
+    requestAnimationFrame(parallaxTick);
+  }
+  parallaxTick();
+
+})();
+</script>
+
+</body>
+</html>
+<!-- pages trigger -->
